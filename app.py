@@ -131,6 +131,13 @@ if generate_button:
         # Show pie chart in Streamlit
         st.pyplot(plt)
 
+        # Adding the conclusion text at the bottom
+        st.write("""
+        **Direct (new student) - Self-aware of RYP or HOM** memiliki jumlah tertinggi, menunjukkan brand awareness yang kuat.
+        **Search Engines** seperti Google dan Safari juga cukup signifikan, mengindikasikan pentingnya optimisasi SEO.
+        **Instagram** dan rekomendasi langsung memiliki jumlah yang lebih rendah, menunjukkan potensi untuk penguatan di area ini.
+        """)
+
     # Jika memilih 300HR, Anda bisa menambahkan logika untuk menampilkan data lainnya
     elif option == "300HR":
         st.subheader("Data untuk 300HR masih belum tersedia.")
