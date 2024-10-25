@@ -122,7 +122,7 @@ if generate_button:
         channel_data.plot(kind='pie', autopct='%1.1f%%', startangle=140, colors=['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3'])
 
         # Adding title
-        plt.title("Composition of Channels Used by Students to Initiate Enquiries (Cleaned)")
+        # plt.title("Composition of Channels Used by Students to Initiate Enquiries (Cleaned)")
 
         # Equal aspect ratio ensures that the pie is drawn as a circle
         plt.ylabel("")  # Removing the default ylabel for a cleaner look
