@@ -11,4 +11,4 @@ option = st.sidebar.selectbox(  # Dropdown di sidebar
 st.title("2025 RYP Student Database")
 
 # Menampilkan pilihan dropdown yang dipilih
-st.sidebar.write(f"Selected: {option}")
+# st.sidebar.write(f"Selected: {option}")
