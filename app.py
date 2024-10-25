@@ -96,7 +96,6 @@ if generate_button:
                          textcoords="offset points", xytext=(0,0), ha='center', color='red', fontsize=8)
 
         # Labeling the chart
-        # plt.title("Comparison of 'Total Paid' and 'Total Payable' (All Sources) with Gaps")
         plt.xlabel("Batch Date Range (Start to End)")
         plt.ylabel("Amount")
         plt.xticks(rotation=45, ha="right")
@@ -107,6 +106,29 @@ if generate_button:
         plt.tight_layout()
 
         # Show the plot in Streamlit
+        st.pyplot(plt)
+
+        # ------------------------
+        # Checking unique values and counts in the column "What channel, with which student initiated enquiry?"
+        st.subheader("Channel Distribution (Pie Chart)")
+        channel_data = df_200hr_stud['What channel, with which student initiated enquiry? (Booking source capture this for their students)'].value_counts()
+        channel_data = channel_data[channel_data.index.str.strip() != '']
+
+        # Display the result to the user for analysis
+        st.dataframe(channel_data)
+
+        # Plotting the cleaned channel data in a pie chart
+        plt.figure(figsize=(8, 8))
+        channel_data.plot(kind='pie', autopct='%1.1f%%', startangle=140, colors=['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3'])
+
+        # Adding title
+        plt.title("Composition of Channels Used by Students to Initiate Enquiries (Cleaned)")
+
+        # Equal aspect ratio ensures that the pie is drawn as a circle
+        plt.ylabel("")  # Removing the default ylabel for a cleaner look
+        plt.tight_layout()
+
+        # Show pie chart in Streamlit
         st.pyplot(plt)
 
     # Jika memilih 300HR, Anda bisa menambahkan logika untuk menampilkan data lainnya
