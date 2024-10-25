@@ -4,7 +4,7 @@ import pandas as pd
 # Sidebar dengan judul dan dropdown
 st.sidebar.title("RYP")  # Judul sidebar
 option = st.sidebar.selectbox(  # Dropdown di sidebar
-    # "Choose HR Option:",  # Teks untuk dropdown
+    "Pilih Kategori:",  # Teks untuk dropdown
     ["Select an option", "200HR", "300HR"]  # Opsi dalam dropdown
 )
 
