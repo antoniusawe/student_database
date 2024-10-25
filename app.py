@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
+from streamlit_echarts import st_echarts
 
 # Sidebar dengan judul dan dropdown
 st.sidebar.title("RYP")  # Judul sidebar
@@ -44,11 +44,8 @@ if generate_button:
         }).unstack(fill_value=0)
 
         # Menampilkan hasil grouping
-        st.subheader("Total Payable x Total Paid x Student still to pay")
+        st.subheader("Grouped Data by 'Batch start date', 'Batch end date', and 'Booking source'")
         st.dataframe(batch_booking_source_200hr)
-
-        # Chart generation section
-        st.subheader("Chart")
 
         # Extract 'Batch start date' and 'Batch end date' from the index and convert them to datetime
         batch_start_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
@@ -70,39 +67,39 @@ if generate_button:
         total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1)
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1)
 
-        # Calculate the gap between Total Payable and Total Paid
-        gap = total_payable_all - total_paid_all
+        # Data untuk ECharts
+        option_chart = {
+            "xAxis": {
+                "type": "category",
+                "data": batch_dates,
+            },
+            "yAxis": {
+                "type": "value",
+            },
+            "series": [
+                {
+                    "data": total_paid_all.tolist(),
+                    "type": "line",
+                    "smooth": True,
+                    "name": "Total Paid (All Sources)",
+                },
+                {
+                    "data": total_payable_all.tolist(),
+                    "type": "line",
+                    "smooth": True,
+                    "name": "Total Payable (in USD or USD equiv)",
+                },
+            ],
+            "tooltip": {
+                "trigger": "axis",
+            },
+            "legend": {
+                "data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)"],
+            },
+        }
 
-        # Plot the lines
-        plt.figure(figsize=(10, 6))
-        plt.plot(batch_dates, total_paid_all, label="Total Paid (All Sources)", marker='o')
-        plt.plot(batch_dates, total_payable_all, label="Total Payable (in USD or USD equiv)", marker='o')
-
-        # Add data labels for Total Paid
-        for i, txt in enumerate(total_paid_all):
-            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_paid_all[i]), textcoords="offset points", xytext=(0,5), ha='center')
-
-        # Add data labels for Total Payable
-        for i, txt in enumerate(total_payable_all):
-            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_payable_all[i]), textcoords="offset points", xytext=(0,5), ha='center')
-
-        # Fill the gap between the lines with a color
-        plt.fill_between(batch_dates, total_paid_all, total_payable_all, color='grey', alpha=0.3)
-
-        # Add data labels for the gap (difference)
-        for i, g in enumerate(gap):
-            plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid_all[i] + total_payable_all[i]) / 2), 
-                         textcoords="offset points", xytext=(0,0), ha='center', color='red')
-
-        # Labeling the chart
-        # plt.title("Comparison of 'Total Paid' and 'Total Payable' (All Sources) with Gaps")
-        plt.xlabel("Batch Date Range (Start to End)")
-        plt.ylabel("Amount")
-        plt.xticks(rotation=45, ha="right")
-        plt.legend()
-
-        # Show the plot in Streamlit
-        st.pyplot(plt)
+        # Tampilkan ECharts di Streamlit
+        st_echarts(option_chart)
 
     # Jika memilih 300HR, Anda bisa menambahkan logika untuk menampilkan data lainnya
     elif option == "300HR":
