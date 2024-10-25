@@ -70,7 +70,6 @@ if generate_button:
         # Extract the data for Total paid and Total payable across all sources
         total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1)
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1)
-        student_still_to_pay = batch_booking_source_sorted['Student still to pay'].sum(axis=1)
 
         # Calculate the gap between Total Payable and Total Paid
         gap = total_payable_all - total_paid_all
@@ -96,21 +95,12 @@ if generate_button:
             plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid_all[i] + total_payable_all[i]) / 2), 
                          textcoords="offset points", xytext=(0,0), ha='center', color='red', fontsize=8)
 
-        # Add 'Student still to pay' line
-        plt.plot(batch_dates, student_still_to_pay, label="Student still to pay", marker='o', color='red')
-
         # Labeling the chart
-        plt.title("Comparison of 'Total Paid', 'Total Payable' and 'Student Still to Pay' (All Sources)")
+        plt.title("Comparison of 'Total Paid' and 'Total Payable' (All Sources) with Gaps")
         plt.xlabel("Batch Date Range (Start to End)")
         plt.ylabel("Amount")
-        
-        # Improve the X-axis display
         plt.xticks(rotation=45, ha="right")
-        
-        # Add padding to Y-axis
         plt.ylim(0, max(total_payable_all) * 1.1)  # Add some padding on top
-        
-        # Add legend
         plt.legend()
 
         # Use tight layout
