@@ -4,14 +4,14 @@ import pandas as pd
 # URL dari file Excel di GitHub
 file_url = 'https://raw.githubusercontent.com/antoniusawe/student_database/main/student_database_200hr.xlsx'
 
-st.title("Student Database RYP 200HR")
+st.title("Student Database RYP")
 
 # Membaca file Excel dari URL
 try:
     data = pd.read_excel(file_url)
 
     # Tampilkan data di Streamlit
-    st.write("## Student Database")
+    st.write("## Student Database 200HR")
     st.dataframe(data)
 
 except Exception as e:
