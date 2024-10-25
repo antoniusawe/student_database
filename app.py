@@ -3,8 +3,8 @@ import pandas as pd
 
 # Fungsi untuk halaman Home
 def show_home():
-    st.title("RYP Student Database")
-    st.write("Selamat datang di RYP Student Database. Silakan klik tombol 'Next' untuk melihat data mahasiswa.")
+    st.title("2025 RYP Student Database")
+    # st.write("Selamat datang di RYP Student Database. Silakan klik tombol 'Next' untuk melihat data mahasiswa.")
     
     # Tombol untuk pindah ke halaman berikutnya
     if st.button("Next"):
