@@ -63,38 +63,58 @@ if generate_button:
         # Combine start and end dates for x-axis labels
         batch_dates = [f"{start} to {end}" for start, end in zip(batch_start_dates_sorted, batch_end_dates_sorted)]
 
-        # Extract the data for Total paid and Total payable across all sources
+        # Extract the data for Total paid, Total payable, and Student still to pay across all sources
         total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1)
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1)
+        student_still_to_pay_all = batch_booking_source_sorted['Student still to pay'].sum(axis=1)
+
+        # Slicer for batch date range
+        start_idx, end_idx = st.slider(
+            "Select Batch Date Range",
+            0, len(batch_dates)-1, (0, len(batch_dates)-1)
+        )
+        selected_batch_dates = batch_dates[start_idx:end_idx+1]
+        selected_total_payable = total_payable_all[start_idx:end_idx+1]
+        selected_total_paid = total_paid_all[start_idx:end_idx+1]
+        selected_student_still_to_pay = student_still_to_pay_all[start_idx:end_idx+1]
 
         # Data untuk ECharts
         option_chart = {
             "xAxis": {
                 "type": "category",
-                "data": batch_dates,
+                "data": selected_batch_dates,
             },
             "yAxis": {
                 "type": "value",
             },
             "series": [
                 {
-                    "data": total_paid_all.tolist(),
+                    "data": selected_total_paid.tolist(),
                     "type": "line",
                     "smooth": True,
                     "name": "Total Paid (All Sources)",
+                    "lineStyle": {"width": 3},
                 },
                 {
-                    "data": total_payable_all.tolist(),
+                    "data": selected_total_payable.tolist(),
                     "type": "line",
                     "smooth": True,
                     "name": "Total Payable (in USD or USD equiv)",
+                    "lineStyle": {"width": 3, "color": "green"},
                 },
+                {
+                    "data": selected_student_still_to_pay.tolist(),
+                    "type": "line",
+                    "smooth": True,
+                    "name": "Student still to pay",
+                    "lineStyle": {"width": 3, "color": "red"},
+                }
             ],
             "tooltip": {
                 "trigger": "axis",
             },
             "legend": {
-                "data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)"],
+                "data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)", "Student still to pay"],
             },
         }
 
