@@ -51,92 +51,70 @@ if generate_button:
         # Chart generation section
         st.subheader("Chart")
 
-        # Extract 'Batch start date' and 'Batch end date' from the index and convert them to datetime
-        batch_start_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
-        batch_end_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch end date'))
+        # Membuat kolom untuk perataan chart dan teks
+        col1, col2 = st.columns([1, 5])  # Ratio 1:5 untuk tata letak
 
-        # Sort the DataFrame by the converted datetime index values
-        batch_booking_source_sorted = batch_booking_source_200hr.copy()
-        batch_booking_source_sorted = batch_booking_source_sorted.set_index([batch_start_dates, batch_end_dates])
-        batch_booking_source_sorted = batch_booking_source_sorted.sort_index()
+        # Menggunakan kolom pertama untuk menampilkan teks dan chart
+        with col1:
+            st.write("")  # Placeholder untuk jarak
 
-        # Convert the sorted dates back to the desired string format for display purposes
-        batch_start_dates_sorted = batch_booking_source_sorted.index.get_level_values(0).strftime('%B %d, %Y')
-        batch_end_dates_sorted = batch_booking_source_sorted.index.get_level_values(1).strftime('%B %d, %Y')
+        with col2:
+            # Extract 'Batch start date' and 'Batch end date' from the index and convert them to datetime
+            batch_start_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
+            batch_end_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch end date'))
 
-        # Combine start and end dates for x-axis labels
-        batch_dates = [f"{start} to {end}" for start, end in zip(batch_start_dates_sorted, batch_end_dates_sorted)]
+            # Sort the DataFrame by the converted datetime index values
+            batch_booking_source_sorted = batch_booking_source_200hr.copy()
+            batch_booking_source_sorted = batch_booking_source_sorted.set_index([batch_start_dates, batch_end_dates])
+            batch_booking_source_sorted = batch_booking_source_sorted.sort_index()
 
-        # Extract the data for Total paid and Total payable across all sources
-        total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1)
-        total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1)
+            # Convert the sorted dates back to the desired string format for display purposes
+            batch_start_dates_sorted = batch_booking_source_sorted.index.get_level_values(0).strftime('%B %d, %Y')
+            batch_end_dates_sorted = batch_booking_source_sorted.index.get_level_values(1).strftime('%B %d, %Y')
 
-        # Calculate the gap between Total Payable and Total Paid
-        gap = total_payable_all - total_paid_all
+            # Combine start and end dates for x-axis labels
+            batch_dates = [f"{start} to {end}" for start, end in zip(batch_start_dates_sorted, batch_end_dates_sorted)]
 
-        # Plot the lines
-        plt.figure(figsize=(10, 6))
-        plt.plot(batch_dates, total_paid_all, label="Total Paid (All Sources)", marker='o', color='blue')
-        plt.plot(batch_dates, total_payable_all, label="Total Payable (in USD or USD equiv)", marker='o', color='orange', linestyle='--')
+            # Extract the data for Total paid and Total payable across all sources
+            total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1)
+            total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1)
 
-        # Add data labels for Total Paid
-        for i, txt in enumerate(total_paid_all):
-            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_paid_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='blue')
+            # Calculate the gap between Total Payable and Total Paid
+            gap = total_payable_all - total_paid_all
 
-        # Add data labels for Total Payable
-        for i, txt in enumerate(total_payable_all):
-            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_payable_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='orange')
+            # Plot the lines
+            plt.figure(figsize=(10, 6))
+            plt.plot(batch_dates, total_paid_all, label="Total Paid (All Sources)", marker='o', color='blue')
+            plt.plot(batch_dates, total_payable_all, label="Total Payable (in USD or USD equiv)", marker='o', color='orange', linestyle='--')
 
-        # Fill the gap between the lines with a color
-        plt.fill_between(batch_dates, total_paid_all, total_payable_all, color='grey', alpha=0.3)
+            # Add data labels for Total Paid
+            for i, txt in enumerate(total_paid_all):
+                plt.annotate(f'{txt:.0f}', (batch_dates[i], total_paid_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='blue')
 
-        # Add data labels for the gap (difference)
-        for i, g in enumerate(gap):
-            plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid_all[i] + total_payable_all[i]) / 2), 
-                         textcoords="offset points", xytext=(0,0), ha='center', color='red', fontsize=8)
+            # Add data labels for Total Payable
+            for i, txt in enumerate(total_payable_all):
+                plt.annotate(f'{txt:.0f}', (batch_dates[i], total_payable_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='orange')
 
-        # Labeling the chart
-        plt.xlabel("Batch Date Range (Start to End)")
-        plt.ylabel("Amount")
-        plt.xticks(rotation=45, ha="right")
-        plt.ylim(0, max(total_payable_all) * 1.1)  # Add some padding on top
-        plt.legend()
+            # Fill the gap between the lines with a color
+            plt.fill_between(batch_dates, total_paid_all, total_payable_all, color='grey', alpha=0.3)
 
-        # Use tight layout
-        plt.tight_layout()
+            # Add data labels for the gap (difference)
+            for i, g in enumerate(gap):
+                plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid_all[i] + total_payable_all[i]) / 2), 
+                            textcoords="offset points", xytext=(0,0), ha='center', color='red', fontsize=8)
 
-        # Show the plot in Streamlit
-        st.pyplot(plt)
+            # Labeling the chart
+            plt.xlabel("Batch Date Range (Start to End)")
+            plt.ylabel("Amount")
+            plt.xticks(rotation=45, ha="right")
+            plt.ylim(0, max(total_payable_all) * 1.1)  # Add some padding on top
+            plt.legend()
 
-        # ------------------------
-        # Checking unique values and counts in the column "What channel, with which student initiated enquiry?"
-        st.subheader("Channel Distribution (Pie Chart)")
-        channel_data = df_200hr_stud['What channel, with which student initiated enquiry? (Booking source capture this for their students)'].value_counts()
-        channel_data = channel_data[channel_data.index.str.strip() != '']
+            # Use tight layout
+            plt.tight_layout()
 
-        # Display the result to the user for analysis
-        st.dataframe(channel_data)
-
-        # Plotting the cleaned channel data in a pie chart
-        plt.figure(figsize=(8, 8))
-        channel_data.plot(kind='pie', autopct='%1.1f%%', startangle=140, colors=['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3'])
-
-        # Adding title
-        # plt.title("Composition of Channels Used by Students to Initiate Enquiries (Cleaned)")
-
-        # Equal aspect ratio ensures that the pie is drawn as a circle
-        plt.ylabel("")  # Removing the default ylabel for a cleaner look
-        plt.tight_layout()
-
-        # Show pie chart in Streamlit
-        st.pyplot(plt)
-
-        # Adding the conclusion text at the bottom
-        st.write("""
-        **Direct (new student) - Self-aware of RYP or HOM** memiliki jumlah tertinggi, menunjukkan brand awareness yang kuat.
-        **Search Engines** seperti Google dan Safari juga cukup signifikan, mengindikasikan pentingnya optimisasi SEO.
-        **Instagram** dan rekomendasi langsung memiliki jumlah yang lebih rendah, menunjukkan potensi untuk penguatan di area ini.
-        """)
+            # Show the plot in Streamlit
+            st.pyplot(plt)
 
     # Jika memilih 300HR, Anda bisa menambahkan logika untuk menampilkan data lainnya
     elif option == "300HR":
