@@ -28,10 +28,23 @@ if generate_button:
         url = "https://raw.githubusercontent.com/antoniusawe/student_database/main/student_database_200hr.xlsx"
         
         # Membaca file Excel langsung dari URL
-        data = pd.read_excel(url)
+        df_200hr_stud = pd.read_excel(url)
 
         # Menampilkan data dalam bentuk tabel
-        st.dataframe(data)
+        st.dataframe(df_200hr_stud)
+
+        # Grouping the data sesuai dengan instruksi Anda
+        batch_booking_source_200hr = df_200hr_stud.groupby(
+            ['Batch start date', 'Batch end date', 'Booking source']
+        ).agg({
+            'Total Payable (in USD or USD equiv)': 'sum',
+            'Total paid (as of today)': 'sum',
+            'Student still to pay': 'sum'
+        }).unstack(fill_value=0)
+
+        # Menampilkan hasil grouping
+        st.subheader("Grouped Data by 'Batch start date', 'Batch end date', and 'Booking source'")
+        st.dataframe(batch_booking_source_200hr)
 
     # Jika memilih 300HR, Anda bisa menambahkan logika untuk menampilkan data lainnya
     elif option == "300HR":
