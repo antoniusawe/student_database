@@ -5,14 +5,18 @@ import pandas as pd
 st.sidebar.title("RYP")  # Judul sidebar
 option = st.sidebar.selectbox(  # Dropdown di sidebar
     "Choose HR Option:",  # Teks untuk dropdown
-    ["200HR", "300HR"]  # Opsi dalam dropdown
+    ["Select an option", "200HR", "300HR"]  # Opsi dalam dropdown
 )
 
 # Halaman utama
 st.title("2025 RYP Student Database")
 
+# Jika belum memilih atau pilihannya masih 'Select an option'
+if option == "Select an option":
+    st.write("Silakan pilih opsi dari dropdown untuk melihat data.")
+
 # Jika memilih 200HR, tampilkan data dari file Excel
-if option == "200HR":
+elif option == "200HR":
     st.subheader("Data 200HR Students")
     
     # URL raw dari file Excel di GitHub
@@ -23,5 +27,7 @@ if option == "200HR":
 
     # Menampilkan data dalam bentuk tabel
     st.dataframe(data)
-else:
-    st.write("Silakan pilih opsi dari dropdown.")
+
+# Jika memilih 300HR, Anda bisa menambahkan logika untuk menampilkan data lainnya
+elif option == "300HR":
+    st.subheader("Data untuk 300HR masih belum tersedia.")
