@@ -110,7 +110,7 @@ if generate_button:
 
         # ------------------------
         # Checking unique values and counts in the column "What channel, with which student initiated enquiry?"
-        st.subheader("Channel Distribution (Pie Chart)")
+        st.subheader("Channel Distribution")
         channel_data = df_200hr_stud['What channel, with which student initiated enquiry? (Booking source capture this for their students)'].value_counts()
         channel_data = channel_data[channel_data.index.str.strip() != '']
 
@@ -226,7 +226,7 @@ if generate_button:
 
         # ------------------------
         # Checking unique values and counts in the column "What channel, with which student initiated enquiry?"
-        st.subheader("Channel Distribution (Pie Chart)")
+        st.subheader("Channel Distribution")
         channel_data = df_300hr_stud['What channel, with which student initiated enquiry? (Booking source capture this for their students)'].value_counts()
         channel_data = channel_data[channel_data.index.str.strip() != '']
 
