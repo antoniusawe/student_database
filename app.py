@@ -66,36 +66,36 @@ if generate_button:
         # Combine start and end dates for x-axis labels
         batch_dates = [f"{start} to {end}" for start, end in zip(batch_start_dates_sorted, batch_end_dates_sorted)]
 
-        # Extract the data for HOM - Total paid and Student still to pay
-        total_payable = pd.to_numeric(batch_booking_source_sorted[('Total Payable (in USD or USD equiv)')], errors='coerce')
-        total_paid = pd.to_numeric(batch_booking_source_sorted[('Total paid (as of today)')], errors='coerce')
+        # Extract the data for Total paid and Total payable across all sources
+        total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1)
+        total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1)
 
         # Calculate the gap between Total Payable and Total Paid
-        gap = total_payable - total_paid
+        gap = total_payable_all - total_paid_all
 
         # Plot the lines
         plt.figure(figsize=(10, 6))
-        plt.plot(batch_dates, total_paid, label="Total Paid", marker='o')
-        plt.plot(batch_dates, total_payable, label="Total Payable (in USD or USD equiv)", marker='o')
+        plt.plot(batch_dates, total_paid_all, label="Total Paid (All Sources)", marker='o')
+        plt.plot(batch_dates, total_payable_all, label="Total Payable (in USD or USD equiv)", marker='o')
 
         # Add data labels for Total Paid
-        for i, txt in enumerate(total_paid):
-            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_paid[i]), textcoords="offset points", xytext=(0,5), ha='center')
+        for i, txt in enumerate(total_paid_all):
+            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_paid_all[i]), textcoords="offset points", xytext=(0,5), ha='center')
 
         # Add data labels for Total Payable
-        for i, txt in enumerate(total_payable):
-            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_payable[i]), textcoords="offset points", xytext=(0,5), ha='center')
+        for i, txt in enumerate(total_payable_all):
+            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_payable_all[i]), textcoords="offset points", xytext=(0,5), ha='center')
 
         # Fill the gap between the lines with a color
-        plt.fill_between(batch_dates, total_paid, total_payable, color='grey', alpha=0.3)
+        plt.fill_between(batch_dates, total_paid_all, total_payable_all, color='grey', alpha=0.3)
 
         # Add data labels for the gap (difference)
         for i, g in enumerate(gap):
-            plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid[i] + total_payable[i]) / 2), 
+            plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid_all[i] + total_payable_all[i]) / 2), 
                          textcoords="offset points", xytext=(0,0), ha='center', color='red')
 
         # Labeling the chart
-        plt.title("Comparison of 'Total Paid' and 'Total Payable' (HOM) with Gaps")
+        plt.title("Comparison of 'Total Paid' and 'Total Payable' (All Sources) with Gaps")
         plt.xlabel("Batch Date Range (Start to End)")
         plt.ylabel("Amount")
         plt.xticks(rotation=45, ha="right")
