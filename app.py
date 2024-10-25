@@ -95,7 +95,7 @@ if generate_button:
                          textcoords="offset points", xytext=(0,0), ha='center', color='red')
 
         # Labeling the chart
-        plt.title("Comparison of 'Total Paid' and 'Total Payable' (All Sources) with Gaps")
+        # plt.title("Comparison of 'Total Paid' and 'Total Payable' (All Sources) with Gaps")
         plt.xlabel("Batch Date Range (Start to End)")
         plt.ylabel("Amount")
         plt.xticks(rotation=45, ha="right")
