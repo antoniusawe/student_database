@@ -67,8 +67,8 @@ if generate_button:
         batch_dates = [f"{start} to {end}" for start, end in zip(batch_start_dates_sorted, batch_end_dates_sorted)]
 
         # Extract the data for HOM - Total paid and Student still to pay
-        total_payable = batch_booking_source_sorted[('Total Payable (in USD or USD equiv)')]
-        total_paid = batch_booking_source_sorted[('Total paid (as of today)')]
+        total_payable = pd.to_numeric(batch_booking_source_sorted[('Total Payable (in USD or USD equiv)')], errors='coerce')
+        total_paid = pd.to_numeric(batch_booking_source_sorted[('Total paid (as of today)')], errors='coerce')
 
         # Calculate the gap between Total Payable and Total Paid
         gap = total_payable - total_paid
