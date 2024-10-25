@@ -45,7 +45,7 @@ if generate_button:
         }).unstack(fill_value=0)
 
         # Menampilkan hasil grouping
-        st.subheader("Grouped Data by 'Batch start date', 'Batch end date', and 'Booking source'")
+        st.subheader("Total Payable x Total Paid x Student still to pay")
         st.dataframe(batch_booking_source_200hr)
 
         # Chart generation section
@@ -76,8 +76,8 @@ if generate_button:
 
         # Plot the lines
         plt.figure(figsize=(10, 6))
-        plt.plot(batch_dates, total_paid_all, label="Total Paid (All Sources)", marker='o', color='blue', linestyle='--')
-        plt.plot(batch_dates, total_payable_all, label="Total Payable (in USD or USD equiv)", marker='o', color='orange')
+        plt.plot(batch_dates, total_paid_all, label="Total Paid (All Sources)", marker='o', color='blue')
+        plt.plot(batch_dates, total_payable_all, label="Total Payable (in USD or USD equiv)", marker='o', color='orange', linestyle='--')
 
         # Add data labels for Total Paid
         for i, txt in enumerate(total_paid_all):
@@ -96,7 +96,7 @@ if generate_button:
                          textcoords="offset points", xytext=(0,0), ha='center', color='red', fontsize=8)
 
         # Labeling the chart
-        plt.title("Comparison of 'Total Paid' and 'Total Payable' (All Sources) with Gaps")
+        # plt.title("Comparison of 'Total Paid' and 'Total Payable' (All Sources) with Gaps")
         plt.xlabel("Batch Date Range (Start to End)")
         plt.ylabel("Amount")
         plt.xticks(rotation=45, ha="right")
