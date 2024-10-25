@@ -44,7 +44,7 @@ if generate_button:
         }).unstack(fill_value=0)
 
         # Menampilkan hasil grouping
-        st.subheader("Grouped Data by 'Batch start date', 'Batch end date', and 'Booking source'")
+        st.subheader("Total Payable x Total Paid x Student still to pay")
         st.dataframe(batch_booking_source_200hr)
 
         # Chart generation section
