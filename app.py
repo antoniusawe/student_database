@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Sidebar dengan judul dan dropdown
 st.sidebar.title("RYP")  # Judul sidebar
@@ -43,8 +44,65 @@ if generate_button:
         }).unstack(fill_value=0)
 
         # Menampilkan hasil grouping
-        st.subheader("Total Payable x Total Paid x Student still to pay")
+        st.subheader("Grouped Data by 'Batch start date', 'Batch end date', and 'Booking source'")
         st.dataframe(batch_booking_source_200hr)
+
+        # Chart generation section
+        st.subheader("Chart")
+
+        # Extract 'Batch start date' and 'Batch end date' from the index and convert them to datetime
+        batch_start_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
+        batch_end_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch end date'))
+
+        # Sort the DataFrame by the converted datetime index values
+        batch_booking_source_sorted = batch_booking_source_200hr.copy()
+        batch_booking_source_sorted = batch_booking_source_sorted.set_index([batch_start_dates, batch_end_dates])
+        batch_booking_source_sorted = batch_booking_source_sorted.sort_index()
+
+        # Convert the sorted dates back to the desired string format for display purposes
+        batch_start_dates_sorted = batch_booking_source_sorted.index.get_level_values(0).strftime('%B %d, %Y')
+        batch_end_dates_sorted = batch_booking_source_sorted.index.get_level_values(1).strftime('%B %d, %Y')
+
+        # Combine start and end dates for x-axis labels
+        batch_dates = [f"{start} to {end}" for start, end in zip(batch_start_dates_sorted, batch_end_dates_sorted)]
+
+        # Extract the data for HOM - Total paid and Student still to pay
+        total_payable = batch_booking_source_sorted[('Total Payable (in USD or USD equiv)')]
+        total_paid = batch_booking_source_sorted[('Total paid (as of today)')]
+
+        # Calculate the gap between Total Payable and Total Paid
+        gap = total_payable - total_paid
+
+        # Plot the lines
+        plt.figure(figsize=(10, 6))
+        plt.plot(batch_dates, total_paid, label="Total Paid", marker='o')
+        plt.plot(batch_dates, total_payable, label="Total Payable (in USD or USD equiv)", marker='o')
+
+        # Add data labels for Total Paid
+        for i, txt in enumerate(total_paid):
+            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_paid[i]), textcoords="offset points", xytext=(0,5), ha='center')
+
+        # Add data labels for Total Payable
+        for i, txt in enumerate(total_payable):
+            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_payable[i]), textcoords="offset points", xytext=(0,5), ha='center')
+
+        # Fill the gap between the lines with a color
+        plt.fill_between(batch_dates, total_paid, total_payable, color='grey', alpha=0.3)
+
+        # Add data labels for the gap (difference)
+        for i, g in enumerate(gap):
+            plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid[i] + total_payable[i]) / 2), 
+                         textcoords="offset points", xytext=(0,0), ha='center', color='red')
+
+        # Labeling the chart
+        plt.title("Comparison of 'Total Paid' and 'Total Payable' (HOM) with Gaps")
+        plt.xlabel("Batch Date Range (Start to End)")
+        plt.ylabel("Amount")
+        plt.xticks(rotation=45, ha="right")
+        plt.legend()
+
+        # Show the plot in Streamlit
+        st.pyplot(plt)
 
     # Jika memilih 300HR, Anda bisa menambahkan logika untuk menampilkan data lainnya
     elif option == "300HR":
