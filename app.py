@@ -1,42 +1,44 @@
 import streamlit as st
 import pandas as pd
 
+# Menambahkan Sidebar untuk navigasi
+st.sidebar.title("Configuration")
+st.sidebar.subheader("Choose your preferred API:")
+
+# Pilihan API dalam bentuk dropdown atau selectbox
+api_choice = st.sidebar.selectbox("Select API:", ["API 1", "API 2", "API 3"])
+
+# Tampilkan pilihan API yang dipilih
+st.write(f"You selected {api_choice}")
+
 # Fungsi untuk halaman Home
 def show_home():
     st.title("2025 RYP Student Database")
-    # st.write("Selamat datang di RYP Student Database. Silakan klik tombol 'Next' untuk melihat data mahasiswa.")
-    
-    # Tombol untuk pindah ke halaman berikutnya
-    if st.button("Next"):
-        st.session_state.page = "app"  # Mengubah session state ke halaman app
+    st.write("Selamat datang di RYP Student Database. Silakan klik tombol di sidebar untuk melihat data mahasiswa atau melakukan konfigurasi.")
 
-# Fungsi untuk halaman App
-def show_app():
-    st.title("Student Database Viewer")
-    
-    file_url = 'https://raw.githubusercontent.com/antoniusawe/student_database/main/student_database_200hr.xlsx'
-    
+# Fungsi untuk halaman Data Mahasiswa
+def show_student_data():
+    st.title("Data Mahasiswa 2025 RYP")
+
+    # Memuat data dari file CSV (ganti 'data_mahasiswa.csv' dengan file yang sesuai)
     try:
-        # Membaca file Excel dari URL
-        data = pd.read_excel(file_url)
-
-        # Tampilkan data di Streamlit
-        st.write("## Student Database")
+        data = pd.read_csv('data_mahasiswa.csv')
+        st.write("Berikut adalah data mahasiswa:")
         st.dataframe(data)
 
-    except Exception as e:
-        st.error(f"Terjadi kesalahan saat membaca file: {e}")
-    
-    # Tombol untuk kembali ke halaman Home
-    if st.button("Back"):
-        st.session_state.page = "home"  # Mengubah session state ke halaman home
+        # Filter data berdasarkan nama atau NIM
+        search_term = st.text_input("Cari berdasarkan Nama atau NIM:")
+        if search_term:
+            filtered_data = data[data.apply(lambda row: search_term.lower() in row.to_string().lower(), axis=1)]
+            st.write(f"Hasil pencarian untuk '{search_term}':")
+            st.dataframe(filtered_data)
+    except FileNotFoundError:
+        st.error("File data_mahasiswa.csv tidak ditemukan. Pastikan file berada di direktori yang benar.")
 
-# Pengaturan default untuk session state
-if 'page' not in st.session_state:
-    st.session_state.page = 'home'
+# Menampilkan halaman sesuai pilihan di sidebar
+page = st.sidebar.selectbox("Pilih Halaman", ["Home", "Data Mahasiswa"])
 
-# Kondisi untuk menampilkan halaman berdasarkan session state
-if st.session_state.page == 'home':
+if page == "Home":
     show_home()
-elif st.session_state.page == 'app':
-    show_app()
+elif page == "Data Mahasiswa":
+    show_student_data()
