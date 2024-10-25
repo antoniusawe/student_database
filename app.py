@@ -3,7 +3,7 @@ import streamlit as st
 # Sidebar dengan judul dan dropdown
 st.sidebar.title("RYP")  # Judul sidebar
 option = st.sidebar.selectbox(  # Dropdown di sidebar
-    "Choose HR Option:",  # Teks untuk dropdown
+    "Pilih Kategori:",  # Teks untuk dropdown
     ["200HR", "300HR"]  # Opsi dalam dropdown
 )
 
