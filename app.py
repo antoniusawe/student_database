@@ -4,7 +4,7 @@ import pandas as pd
 # URL dari file Excel di GitHub
 file_url = 'https://raw.githubusercontent.com/antoniusawe/student_database/main/student_database_200hr.xlsx'
 
-st.title("Student Database Viewer")
+st.title("Student Database RYP 200HR")
 
 # Membaca file Excel dari URL
 try:
