@@ -81,7 +81,6 @@ if generate_button:
         # Chart 
         # st.subheader("Chart")
 
-        # Extract 'Batch start date' and 'Batch end date' dan convert ke bentuk datetime
         batch_start_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
         batch_end_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch end date'))
         
@@ -119,7 +118,8 @@ if generate_button:
                 "type": "category",
                 "data": batch_dates,
                 "axisLabel": {
-                    "formatter": lambda x: x.replace(" to ", "\nto\n")  # Membuat label lebih rapih
+                    "interval": 0,  # Menampilkan semua label
+                    "rotate": 45,  # Memutar teks untuk lebih rapi
                 }
             },
             "yAxis": {
@@ -140,7 +140,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "{c}"
+                        "formatter": "${c}"
                     }
                 },
                 {
@@ -157,7 +157,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "{c}"
+                        "formatter": "${c}"
                     }
                 },
                 {
