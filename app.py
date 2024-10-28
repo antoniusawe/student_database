@@ -13,6 +13,8 @@ option = st.sidebar.selectbox(  # Dropdown di sidebar
 # button "Generate"
 generate_button = st.sidebar.button("Generate")
 
+st.image("https://raw.githubusercontent.com/antoniusawe/student_database/main/images/house%20of%20om.png", use_column_width=True)
+
 # home
 st.title("2025 RYP Student Database")
 
