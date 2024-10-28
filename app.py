@@ -153,17 +153,20 @@ if generate_button:
         # Menyusun data untuk ECharts
         options = {
             "tooltip": {"trigger": "item"},
-            "legend": {"top": "5%", "left": "center"},
+            "legend": {
+                "top": "middle",
+                "left": "right"  # Pindahkan legenda ke samping kanan
+            },
             "series": [
                 {
                     "name": "Channel Distribution",
                     "type": "pie",
-                    "radius": ["40%", "70%"],  # Untuk efek donut
+                    "radius": ["40%", "70%"],  # Efek donut
                     "avoidLabelOverlap": False,
                     "label": {
                         "show": True,
                         "position": "inside",
-                        "formatter": "{b}: {d}%"
+                        "formatter": "{b}: {d}%"  # Menampilkan persentase dan label di dalam grafik
                     },
                     "data": [{"value": int(value), "name": str(name)} for name, value in zip(channel_data.index, channel_data.values)]
                 }
