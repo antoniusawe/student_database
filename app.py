@@ -88,7 +88,6 @@ if generate_button:
         # calculate the gap antara Total Payable dan Total Paid
         gap = total_payable_all - total_paid_all
 
-        matplotlib.rcParams['font.family'] = 'Arial'
         
         # Plot the lines
         plt.figure(figsize=(10, 6))
@@ -112,9 +111,11 @@ if generate_button:
                          textcoords="offset points", xytext=(0,0), ha='center', color='red', fontsize=8)
 
         # Labeling the chart
+        wrapped_labels = [label.replace(" to ", "\nto\n") for label in batch_dates]
+        
         plt.xlabel("Batch Date Range (Start to End)")
         plt.ylabel("Amount")
-        plt.xticks(rotation=45, ha="right")
+        plt.xticks(ticks=range(len(batch_dates)), labels=wrapped_labels, rotation=0, ha="center")
         plt.ylim(0, max(total_payable_all) * 1.1)  # Add some padding on top
         plt.legend()
 
