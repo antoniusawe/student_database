@@ -94,55 +94,55 @@ if generate_button:
         # calculate the gap antara Total Payable dan Total Paid
         gap = batch_booking_source_sorted['Student still to pay'].sum(axis=1)
 
-        # Calculate the y-values for the upper boundary of the filled area
-        gap_upper_boundary = [paid + g for paid, g in zip(total_paid_all, gap)]
-        
         # Create an interactive plot with Plotly
-        fig = go.Figure()
-        
-        # Plot the Total Paid line
+    fig = go.Figure()
+    
+    # Plot the Total Paid line
+    fig.add_trace(go.Scatter(
+        x=batch_dates, y=total_paid_all, mode='lines+markers+text', name="Total Paid (All Sources)",
+        line=dict(color='blue'), marker=dict(color='blue'),
+        text=[f'{val:.0f}' for val in total_paid_all], textposition="top center", textfont=dict(size=8)
+    ))
+    
+    # Plot the Total Payable line
+    fig.add_trace(go.Scatter(
+        x=batch_dates, y=total_payable_all, mode='lines+markers+text', name="Total Payable (in USD or USD equiv)",
+        line=dict(color='orange', dash='dash'), marker=dict(color='orange'),
+        text=[f'{val:.0f}' for val in total_payable_all], textposition="top center", textfont=dict(size=8)
+    ))
+    
+    # Calculate the gap area between Total Paid and Total Payable
+    gap_y = [payable - paid for payable, paid in zip(total_payable_all, total_paid_all)]
+    
+    # Fill the area between Total Paid and Total Payable
+    fig.add_trace(go.Scatter(
+        x=batch_dates + batch_dates[::-1],  # Duplicate dates to create a closed shape
+        y=total_paid_all + total_payable_all[::-1],  # Start from Total Paid up to Total Payable
+        fill='toself', fillcolor='rgba(178, 180, 163, 0.3)', line=dict(color='rgba(255,255,255,0)'),
+        hoverinfo="skip", showlegend=False  # Skip hover info for the fill and hide from legend
+    ))
+    
+    # Add data labels for the gap (difference) in red color
+    for i, g in enumerate(gap_y):
+        midpoint_y = total_paid_all[i] + g / 2
         fig.add_trace(go.Scatter(
-            x=batch_dates, y=total_paid_all, mode='lines+markers+text', name="Total Paid (All Sources)",
-            line=dict(color='blue'), marker=dict(color='blue'),
-            text=[f'{val:.0f}' for val in total_paid_all], textposition="top center", textfont=dict(size=8)
+            x=[batch_dates[i]], y=[midpoint_y], 
+            mode="text", text=f'{g:.0f}', textfont=dict(color='red', size=8), showlegend=False
         ))
-        
-        # Plot the Total Payable line
-        fig.add_trace(go.Scatter(
-            x=batch_dates, y=total_payable_all, mode='lines+markers+text', name="Total Payable (in USD or USD equiv)",
-            line=dict(color='orange', dash='dash'), marker=dict(color='orange'),
-            text=[f'{val:.0f}' for val in total_payable_all], textposition="top center", textfont=dict(size=8)
-        ))
-        
-        # Fill the area between Total Paid and the calculated gap upper boundary
-        fig.add_trace(go.Scatter(
-            x=batch_dates + batch_dates[::-1],  # Duplicate batch_dates to close the shape
-            y=total_paid_all + gap_upper_boundary[::-1],  # Create the filled area using the calculated gap boundary
-            fill='toself', fillcolor='rgba(178, 180, 163, 0.3)', line=dict(color='rgba(255,255,255,0)'),
-            hoverinfo="skip", showlegend=False  # Skip hover info for the fill and hide from legend
-        ))
-        
-        # Add data labels for the gap (difference) in red color at the midpoint
-        for i, g in enumerate(gap):
-            midpoint_y = total_paid_all[i] + g / 2
-            fig.add_trace(go.Scatter(
-                x=[batch_dates[i]], y=[midpoint_y], 
-                mode="text", text=f'{g:.0f}', textfont=dict(color='red', size=8), showlegend=False
-            ))
-        
-        # Update layout for labels, axis titles, and sizing
-        fig.update_layout(
-            title="Total Paid vs. Total Payable",
-            xaxis_title="Batch Date Range (Start to End)",
-            yaxis_title="Amount",
-            xaxis=dict(tickvals=batch_dates, ticktext=[label.replace(" to ", "<br>to<br>") for label in batch_dates]),
-            yaxis=dict(range=[0, max(total_payable_all) * 1.1]),
-            legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01),
-            height=600,
-        )
-        
-        # Show the interactive plot in Streamlit
-        st.plotly_chart(fig)
+    
+    # Update layout for labels, axis titles, and sizing
+    fig.update_layout(
+        title="Total Paid vs. Total Payable",
+        xaxis_title="Batch Date Range (Start to End)",
+        yaxis_title="Amount",
+        xaxis=dict(tickvals=batch_dates, ticktext=[label.replace(" to ", "<br>to<br>") for label in batch_dates]),
+        yaxis=dict(range=[0, max(total_payable_all) * 1.1]),
+        legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01),
+        height=600,
+    )
+    
+    # Show the interactive plot in Streamlit
+    st.plotly_chart(fig)
 
         # ------------------------
         # Checking unique values and counts in the column "What channel, with which student initiated enquiry?"
