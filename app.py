@@ -138,8 +138,7 @@ if generate_button:
                         "show": True,
                         "position": "top",
                         "formatter": "${c}"
-                    },
-                    "areaStyle": {"color": "rgba(173, 216, 230, 0.3)"},  # Area fill untuk Total Paid
+                    }
                 },
                 {
                     "name": "Total Payable (in USD or USD equiv)",
@@ -156,8 +155,21 @@ if generate_button:
                         "show": True,
                         "position": "top",
                         "formatter": "${c}"
+                    }
+                },
+                {
+                    "name": "Gap Area",
+                    "type": "line",
+                    "data": total_payable_all,
+                    "smooth": True,
+                    "lineStyle": {"width": 0},  # Menghilangkan garis, hanya area
+                    "areaStyle": {
+                        "color": "rgba(255, 165, 0, 0.3)",  # Warna transparan untuk area
                     },
-                    "areaStyle": {"color": "rgba(255, 165, 0, 0.3)"},  # Area fill untuk Total Payable, menempel di atas garis Total Paid
+                    "stack": "Total Paid (All Sources)",  # Membuat area hanya di antara dua garis
+                    "tooltip": {
+                        "show": False  # Menghilangkan tooltip untuk area gap
+                    }
                 }
             ]
         }
