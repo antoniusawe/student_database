@@ -101,25 +101,15 @@ if generate_button:
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).round(2).tolist()
         gap_all = [round(payable - paid, 2) for payable, paid in zip(total_payable_all, total_paid_all)]
         
-        # Menyusun data untuk ECharts
+        # Menyusun data untuk ECharts tanpa formatter kompleks
         options = {
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "formatter": """
-                    function(params) {
-                        const totalPaid = params[0].data;
-                        const totalPayable = params[1].data;
-                        const gap = totalPayable - totalPaid;
-                        return `${params[0].axisValue}<br />
-                                Total Paid: $${totalPaid.toFixed(2)}<br />
-                                Total Payable: $${totalPayable.toFixed(2)}<br />
-                                Gap: $${gap.toFixed(2)}`;
-                    }
-                """
+                "formatter": "{b}: <br>Total Paid: ${c0:.2f}<br>Total Payable: ${c1:.2f}<br>Gap: ${c2:.2f}"  # Menggunakan format string yang sederhana
             },
             "legend": {
-                "data": ["Total Paid", "Total Payable"]
+                "data": ["Total Paid", "Total Payable", "Gap"]
             },
             "xAxis": {
                 "type": "category",
@@ -176,10 +166,9 @@ if generate_button:
                     "areaStyle": {"color": "rgba(128, 128, 128, 0.3)"},  # Area transparan untuk Gap
                     "label": {
                         "show": True,
-                        "position": "inside",  # Mengatur posisi label di tengah
+                        "position": "inside",  # Mengatur posisi label di tengah area Gap
                         "formatter": "${@:.2f}"  # Format angka pada label dengan dua desimal
-                    },
-                    "tooltip": {"show": False}  # Tidak perlu tooltip terpisah untuk Gap
+                    }
                 }
             ]
         }
