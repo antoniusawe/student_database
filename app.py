@@ -81,6 +81,10 @@ if generate_button:
         # Chart 
         st.subheader("Chart")
 
+        batch_start_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
+        batch_end_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch end date'))
+        
+        # Sort DataFrame berdasarkan periode batch
         batch_booking_source_sorted = batch_booking_source_200hr.copy()
         batch_booking_source_sorted = batch_booking_source_sorted.set_index([batch_start_dates, batch_end_dates])
         batch_booking_source_sorted = batch_booking_source_sorted.sort_index()
