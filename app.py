@@ -94,41 +94,51 @@ if generate_button:
         gap = total_payable_all - total_paid_all
 
         
-        # Plot the lines
-        plt.figure(figsize=(10, 6))
-        plt.plot(batch_dates, total_paid_all, label="Total Paid (All Sources)", marker='o', color='blue')
-        plt.plot(batch_dates, total_payable_all, label="Total Payable (in USD or USD equiv)", marker='o', color='orange', linestyle='--')
+        # Create an interactive plot with Plotly
+        fig = go.Figure()
 
-        # Add data labels for Total Paid
-        for i, txt in enumerate(total_paid_all):
-            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_paid_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='blue')
+        # Plot the Total Paid line
+        fig.add_trace(go.Scatter(
+        x=batch_dates, y=total_paid_all, mode='lines+markers+text', name="Total Paid (All Sources)",
+        line=dict(color='blue'), marker=dict(color='blue'),
+        text=[f'{val:.0f}' for val in total_paid_all], textposition="top center", textfont=dict(size=8)
+        ))
 
-        # Add data labels for Total Payable
-        for i, txt in enumerate(total_payable_all):
-            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_payable_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='orange')
+        # Plot the Total Payable line
+        fig.add_trace(go.Scatter(
+        x =batch_dates, y=total_payable_all, mode='lines+markers+text', name="Total Payable (in USD or USD equiv)",
+        line=dict(color='orange', dash='dash'), marker=dict(color='orange'),
+        text=[f'{val:.0f}' for val in total_payable_all], textposition="top center", textfont=dict(size=8)
+        ))
 
-        # Fill the gap between the lines with a color
-        plt.fill_between(batch_dates, total_paid_all, total_payable_all, color='#b2b4a3', alpha=0.3)
+        # Fill the area between the two lines
+        fig.add_trace(go.Scatter(
+            x=batch_dates + batch_dates[::-1],
+            y=total_paid_all + total_payable_all[::-1],
+            fill='toself', fillcolor='rgba(178, 180, 163, 0.3)', line=dict(color='rgba(255,255,255,0)'),
+            hoverinfo="skip", showlegend=False  # Skip hover info for the fill and hide from legend
+        ))
 
-        # Add data labels for the gap (difference)
+        # Add data labels for the gap (difference) in red color
         for i, g in enumerate(gap):
-            plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid_all[i] + total_payable_all[i]) / 2), 
-                         textcoords="offset points", xytext=(0,0), ha='center', color='red', fontsize=8)
+            fig.add_trace(go.Scatter(
+                x=[batch_dates[i]], y=[(total_paid_all[i] + total_payable_all[i]) / 2], 
+                mode="text", text=f'{g:.0f}', textfont=dict(color='red', size=8), showlegend=False
+        ))
 
-        # Labeling the chart
-        wrapped_labels = [label.replace(" to ", "\nto\n") for label in batch_dates]
-        wrapped_labels = [label.replace(" ", "\n", 1) for label in wrapped_labels]
+        # Update layout for labels, axis titles, and sizing
+        fig.update_layout(
+            title="Total Paid vs. Total Payable",
+            xaxis_title="Batch Date Range (Start to End)",
+            yaxis_title="Amount",
+            xaxis=dict(tickvals=batch_dates, ticktext=[label.replace(" to ", "<br>to<br>") for label in batch_dates]),
+            yaxis=dict(range=[0, max(total_payable_all) * 1.1]),
+            legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01),
+            height=600,
+        )
 
-        plt.xlabel("Batch Date Range (Start to End)")
-        plt.ylabel("Amount")
-        plt.xticks(ticks=range(len(batch_dates)), labels=wrapped_labels, rotation=0, ha="center", fontsize=8.3)
-        plt.ylim(0, max(total_payable_all) * 1.1)  # Add some padding on top
-        plt.legend()
-
-        # Use tight layout
-        plt.tight_layout()
-        # Show the plot in Streamlit
-        st.pyplot(plt)
+        # Show the interactive plot in Streamlit
+        st.plotly_chart(fig)
 
         # ------------------------
         # Checking unique values and counts in the column "What channel, with which student initiated enquiry?"
