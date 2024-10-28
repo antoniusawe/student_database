@@ -239,10 +239,11 @@ if generate_button:
             plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid_all[i] + total_payable_all[i]) / 2), 
                          textcoords="offset points", xytext=(0,0), ha='center', color='red', fontsize=8)
 
+        
         # Labeling the chart
         plt.xlabel("Batch Date Range (Start to End)")
         plt.ylabel("Amount")
-        plt.xticks(rotation=45, ha="right")
+        plt.xticks(ticks=range(len(batch_dates)), labels=wrapped_labels, rotation=0, ha="center", fontsize=8)
         plt.ylim(0, max(total_payable_all) * 1.1)  # Add some padding on top
         plt.legend()
 
