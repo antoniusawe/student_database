@@ -155,19 +155,20 @@ if generate_button:
             "tooltip": {"trigger": "item"},
             "legend": {
                 "top": "middle",
-                "left": "right"  # Pindahkan legenda ke samping kanan
+                "left": "right"  # Memindahkan legenda ke kanan agar tidak mengganggu
             },
             "series": [
                 {
                     "name": "Channel Distribution",
                     "type": "pie",
-                    "radius": ["40%", "70%"],  # Efek donut
-                    "avoidLabelOverlap": False,
+                    "radius": ["50%", "80%"],  # Membuat radius lebih besar agar ada ruang di dalam
+                    "avoidLabelOverlap": True,
                     "label": {
                         "show": True,
-                        "position": "inside",
-                        "formatter": "{b}: {d}%"  # Menampilkan persentase dan label di dalam grafik
+                        "position": "outside",  # Memindahkan label ke luar
+                        "formatter": "{b}: {d}%"  # Menampilkan nama dan persentase
                     },
+                    "labelLine": {"show": True},  # Menampilkan garis penghubung untuk label luar
                     "data": [{"value": int(value), "name": str(name)} for name, value in zip(channel_data.index, channel_data.values)]
                 }
             ]
