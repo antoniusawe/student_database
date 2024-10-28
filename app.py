@@ -36,11 +36,7 @@ if generate_button:
 
         # Menampilkan data dalam bentuk tabel
         st.dataframe(df_200hr_stud)
-
-        # df_200hr_stud['Batch start date'] = pd.to_datetime(df_200hr_stud['Batch start date'])
-        # df_200hr_stud['Batch end date'] = pd.to_datetime(df_200hr_stud['Batch end date'])
-        
-        
+                
         # Grouping the data
         batch_booking_source_200hr = df_200hr_stud.groupby(
             ['Batch start date', 'Batch end date', 'Booking source']
@@ -49,6 +45,10 @@ if generate_button:
             'Total paid (as of today)': 'sum',
             'Student still to pay': 'sum'
         }).unstack(fill_value=0)
+
+        # Mengonversi kolom index 'Batch start date' dan 'Batch end date' ke datetime
+        batch_booking_source_200hr.index = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
+        batch_booking_source_200hr.index = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch end date'))
 
         
         # Menampilkan hasil grouping
