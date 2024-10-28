@@ -4,3 +4,5 @@ openpyxl
 matplotlib
 streamlit-echarts
 plotly
+requests
+datetime
