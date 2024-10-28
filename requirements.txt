@@ -7,3 +7,4 @@ plotly
 requests
 datetime
 python-dateutil
+pytz
