@@ -101,7 +101,7 @@ if generate_button:
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).tolist()
         
         # Hitung gap antara Total Payable dan Total Paid untuk area
-        gap_area = [payable - paid for payable, paid in zip(total_payable_all, total_paid_all)]
+        gap_area = [payable - paid if payable > paid else 0 for payable, paid in zip(total_payable_all, total_paid_all)]
         
         # Menyusun data untuk ECharts dalam format stacked area chart
         options = {
