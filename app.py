@@ -26,7 +26,7 @@ if generate_button:
     
     # Jika memilih 200HR, tampilkan data dari file Excel
     elif option == "200HR":
-        st.subheader("Data 200HR Students")
+        st.subheader("200HR Students Data")
         
         # URL raw dari file Excel di GitHub untuk 200HR
         url = "https://raw.githubusercontent.com/antoniusawe/student_database/main/student_database_200hr.xlsx"
@@ -153,7 +153,7 @@ if generate_button:
 
     # Jika memilih 300HR, tampilkan data dari file Excel untuk 300HR
     elif option == "300HR":
-        st.subheader("Data 300HR Students")
+        st.subheader("300HR Students Data")
         
         # URL raw dari file Excel di GitHub untuk 300HR
         url = "https://raw.githubusercontent.com/antoniusawe/student_database/main/student_database_300hr.xlsx"
