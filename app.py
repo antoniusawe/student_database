@@ -106,20 +106,10 @@ if generate_button:
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "formatter": """
-                function(params) {
-                    const totalPaid = params[0].data;
-                    const totalPayable = params[1].data;
-                    const gap = totalPayable - totalPaid;
-                    return `${params[0].axisValue}<br />
-                            Total Paid: $${totalPaid.toFixed(2)}<br />
-                            Total Payable: $${totalPayable.toFixed(2)}<br />
-                            Gap: $${gap.toFixed(2)}`;
-                }
-                """
+                "formatter": """{b0}<br />Total Paid: ${c0}<br />Total Payable: ${c1}<br />Gap: ${c2}"""  # Menampilkan tooltip dengan format sederhana
             },
             "legend": {
-                "data": ["Total Paid", "Total Payable"]
+                "data": ["Total Paid", "Total Payable", "Gap"]
             },
             "xAxis": {
                 "type": "category",
@@ -132,7 +122,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": "${value:,.0f}"  # Format untuk y-axis dengan pemisah ribuan
+                    "formatter": "${value}"  # Format untuk y-axis sebagai mata uang
                 }
             },
             "series": [
@@ -148,7 +138,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@:.2f}"  # Format angka pada label dengan dua desimal
+                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
                     }
                 },
                 {
@@ -164,8 +154,22 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@:.2f}"  # Format angka pada label dengan dua desimal
+                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
                     }
+                },
+                {
+                    "name": "Gap",
+                    "type": "line",
+                    "data": gap_all,
+                    "smooth": True,
+                    "lineStyle": {"width": 0},  # Menghilangkan garis, hanya area
+                    "areaStyle": {"color": "rgba(128, 128, 128, 0.3)"},  # Area transparan untuk Gap
+                    "label": {
+                        "show": True,
+                        "position": "top",
+                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
+                    },
+                    "tooltip": {"show": False}  # Tidak perlu tooltip terpisah untuk Gap
                 }
             ]
         }
