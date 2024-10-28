@@ -36,9 +36,9 @@ if generate_button:
         # Membaca file Excel langsung dari URL
         df_200hr_stud = pd.read_excel(url)
         
-        # Drop the 'S.No.' column if it exists
-        if 'S.No.' in df_200hr_stud.columns:
-            df_200hr_stud = df_200hr_stud.drop(columns=['S.No.'])
+         # Drop the 'S.No.', 'All', and 'Period' columns if they exist
+        columns_to_drop = ['S.No.', 'All', 'Period']
+        df_200hr_stud = df_200hr_stud.drop(columns=[col for col in columns_to_drop if col in df_200hr_stud.columns])
 
         # Menampilkan data dalam bentuk tabel
         st.dataframe(df_200hr_stud)
@@ -174,8 +174,8 @@ if generate_button:
         # Membaca file Excel langsung dari URL
         df_300hr_stud = pd.read_excel(url)
 
-        if 'S.No.' in df_300hr_stud.columns:
-            df_300hr_stud = df_300hr_stud.drop(columns=['S.No.'])
+        columns_to_drop = ['S.No.', 'All', 'Period']
+        df_300hr_stud = df_300hr_stud.drop(columns=[col for col in columns_to_drop if col in df_300hr_stud.columns])
 
         # Menampilkan data dalam bentuk tabel
         st.dataframe(df_300hr_stud)
