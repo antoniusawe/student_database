@@ -49,7 +49,7 @@ if generate_button:
         st.dataframe(batch_booking_source_200hr)
 
         # Chart generation section
-        st.subheader("Chart")
+        # st.subheader("Chart")
 
         # Extract 'Batch start date' and 'Batch end date' from the index and convert them to datetime
         batch_start_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
@@ -165,7 +165,7 @@ if generate_button:
         st.dataframe(batch_booking_source_300hr)
 
         # Chart generation section
-        st.subheader("Chart")
+        # st.subheader("Chart")
 
         # Extract 'Batch start date' and 'Batch end date' from the index and convert them to datetime
         batch_start_dates = pd.to_datetime(batch_booking_source_300hr.index.get_level_values('Batch start date'))
