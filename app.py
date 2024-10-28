@@ -94,6 +94,9 @@ if generate_button:
         # calculate the gap antara Total Payable dan Total Paid
         gap = batch_booking_source_sorted['Student still to pay'].sum(axis=1)
 
+        # Calculate the y-values for the upper boundary of the filled area
+        gap_upper_boundary = [paid + g for paid, g in zip(total_paid_all, gap)]
+        
         # Create an interactive plot with Plotly
         fig = go.Figure()
         
@@ -111,10 +114,10 @@ if generate_button:
             text=[f'{val:.0f}' for val in total_payable_all], textposition="top center", textfont=dict(size=8)
         ))
         
-        # Fill the area between Total Paid and Total Payable
+        # Fill the area between Total Paid and the calculated gap upper boundary
         fig.add_trace(go.Scatter(
             x=batch_dates + batch_dates[::-1],  # Duplicate batch_dates to close the shape
-            y=total_paid_all + total_payable_all[::-1],  # Start from Total Paid up to Total Payable
+            y=total_paid_all + gap_upper_boundary[::-1],  # Create the filled area using the calculated gap boundary
             fill='toself', fillcolor='rgba(178, 180, 163, 0.3)', line=dict(color='rgba(255,255,255,0)'),
             hoverinfo="skip", showlegend=False  # Skip hover info for the fill and hide from legend
         ))
