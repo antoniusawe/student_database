@@ -157,12 +157,13 @@ if generate_button:
                 {
                     "name": "Channel Distribution",
                     "type": "pie",
-                    "radius": ["40%", "70%"],  # Radius lebih besar untuk ruang tambahan
+                    "radius": ["50%", "80%"],  # Radius lebih besar untuk ruang tambahan
                     "avoidLabelOverlap": True,
                     "label": {
                         "show": True,
                         "position": "outside",  # Memindahkan label ke luar pie chart
-                        "formatter": "{b}: {d}%"  # Menampilkan nama dan persentase
+                        "formatter": lambda params: f"{params['name'][:20]}...\n{params['value']}%",  # Memotong label dan menambahkan baris baru
+                        "overflow": "break"  # Pengaturan untuk memaksa teks turun jika terlalu panjang
                     },
                     "labelLine": {"show": True},  # Garis penghubung untuk label luar
                     "data": [{"value": int(value), "name": str(name)} for name, value in zip(channel_data.index, channel_data.values)]
