@@ -97,14 +97,15 @@ if generate_button:
         batch_dates = [f"{start} to {end}" for start, end in zip(batch_start_dates_sorted, batch_end_dates_sorted)]
         
         # Ambil data Total paid and Total payable
-        total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1).tolist()
-        total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).tolist()
+        total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1).round(2).tolist()
+        total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).round(2).tolist()
         
         # Menyusun data untuk ECharts
         options = {
             "tooltip": {
                 "trigger": "axis",
-                "axisPointer": {"type": "cross"}
+                "axisPointer": {"type": "cross"},
+                "formatter": lambda params: ''.join([f"{p['seriesName']}: ${p['data']:,.2f}<br>" for p in params])
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable"]
@@ -120,7 +121,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": "${value}"
+                    "formatter": "${value:,.0f}"  # Format untuk y-axis
                 }
             },
             "series": [
@@ -136,9 +137,8 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${c}"
-                    },
-                    "stack": "Total",  # Untuk memastikan area stack ke bawah (dasar area)
+                        "formatter": "${@[2]:,.2f}"  # Format angka dengan dua desimal
+                    }
                 },
                 {
                     "name": "Total Payable",
@@ -149,13 +149,12 @@ if generate_button:
                     "symbolSize": 8,
                     "itemStyle": {"color": "orange"},
                     "lineStyle": {"type": "dashed"},
-                    "areaStyle": {"color": "rgba(255, 165, 0, 0.3)"},  # Warna transparan di atas garis biru untuk Gap
+                    "areaStyle": {"color": "rgba(255, 165, 0, 0.3)"},
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${c}"
-                    },
-                    "stack": "Total"  # Untuk memastikan area stack ke atas (menyusun Gap)
+                        "formatter": "${@[2]:,.2f}"  # Format angka dengan dua desimal
+                    }
                 }
             ]
         }
