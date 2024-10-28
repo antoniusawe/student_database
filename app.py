@@ -145,11 +145,11 @@ if generate_button:
             hole=0.3,  # Add this for a donut chart effect, optional
         )
 
-# Add percentage display and customize the start angle
-fig.update_traces(textposition='inside', textinfo='percent+label', rotation=140)
+        # Add percentage display and customize the start angle
+        fig.update_traces(textposition='inside', textinfo='percent+label', rotation=140)
 
-# Show the plot in Streamlit
-st.plotly_chart(fig)  
+        # Show the plot in Streamlit
+        st.plotly_chart(fig)  
 
         # Adding title
         # plt.title("Composition of Channels Used by Students to Initiate Enquiries (Cleaned)")
