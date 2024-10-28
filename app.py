@@ -8,6 +8,7 @@ import requests
 import os
 from datetime import datetime
 import pytz
+from streamlit_echarts import st_echarts
 
 # sidebar
 st.sidebar.title("RYP")  # Judul sidebar
