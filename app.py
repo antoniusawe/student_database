@@ -149,7 +149,7 @@ if generate_button:
         # Display the result to the user for analysis
         st.dataframe(channel_data)
 
-        # Pilih Warna Secara Dinamis
+        # Pilih skema warna secara dinamis
         color_options = {
             'Default': ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3'],
             'Option 1': ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728'],
@@ -157,22 +157,22 @@ if generate_button:
         }
         selected_color = st.selectbox("Pilih Skema Warna", options=list(color_options.keys()))
         
-        # Pilih Hole untuk Donut Effect
+        # Pilih ukuran hole untuk donut effect
         hole_size = st.slider("Ukuran Hole (Donut)", 0.0, 0.5, 0.3)
         
-        # Buat pie chart
+        # Membuat pie chart
         fig = px.pie(
             channel_data,
-            values=channel_data['Count'],
+            values=channel_data.values,
             names=channel_data.index,
             color_discrete_sequence=color_options[selected_color],
             hole=hole_size
         )
         
-        # Customize text position and angle
+        # Menyesuaikan posisi teks dan sudut awal
         fig.update_traces(textposition='inside', textinfo='percent+label', rotation=140)
         
-        # Tampilkan chart
+        # Menampilkan plot di Streamlit
         st.plotly_chart(fig)
         
         # Menampilkan Judul
