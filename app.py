@@ -46,11 +46,6 @@ if generate_button:
             'Student still to pay': 'sum'
         }).unstack(fill_value=0)
 
-        # Mengonversi kolom index 'Batch start date' dan 'Batch end date' ke datetime
-        batch_booking_source_200hr.index = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
-        batch_booking_source_200hr.index = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch end date'))
-
-        
         # Menampilkan hasil grouping
         st.subheader("Total Payable x Total Paid x Student still to pay")
         st.dataframe(batch_booking_source_200hr)
