@@ -143,7 +143,7 @@ if generate_button:
             channel_data,
             values=channel_data.values,
             names=channel_data.index,
-            title="Channel Data Distribution",
+            # title="Channel Data Distribution",
             color_discrete_sequence=['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3'],
             hole=0.3,  # Add this for a donut chart effect, optional
         )
@@ -279,7 +279,7 @@ if generate_button:
             channel_data,
             values=channel_data.values,
             names=channel_data.index,
-            title="Channel Data Distribution",
+            # title="Channel Data Distribution",
             color_discrete_sequence=['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3'],
             hole=0.3,  # Add this for a donut chart effect, optional
         )
