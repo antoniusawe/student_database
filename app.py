@@ -46,18 +46,6 @@ if generate_button:
             'Student still to pay': 'sum'
         }).unstack(fill_value=0)
 
-        # Mengubah index date ke datetime agar bisa diurutkan
-        batch_booking_source_200hr.index = pd.MultiIndex.from_tuples(
-            [(pd.to_datetime(start), pd.to_datetime(end)) for start, end in batch_booking_source_200hr.index]
-        )
-
-        # Mengurutkan berdasarkan 'Batch start date' dan 'Batch end date'
-        batch_booking_source_sorted = batch_booking_source_200hr.sort_index()
-
-        # Mengonversi kembali ke format string jika dibutuhkan untuk tampilan
-        batch_booking_source_sorted.index = pd.MultiIndex.from_tuples(
-            [(start.strftime('%B %d, %Y'), end.strftime('%B %d, %Y')) for start, end in batch_booking_source_sorted.index]
-        )
         
         # Menampilkan hasil grouping
         st.subheader("Total Payable x Total Paid x Student still to pay")
