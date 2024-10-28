@@ -97,19 +97,18 @@ if generate_button:
         batch_dates = [f"{start} to {end}" for start, end in zip(batch_start_dates_sorted, batch_end_dates_sorted)]
         
         # Ambil data Total paid and Total payable
-        total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1).tolist()
-        total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).tolist()
+        total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1).round(2).tolist()
+        total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).round(2).tolist()
         
         # Hitung gap antara Total Payable dan Total Paid untuk area
-        gap_area = [payable - paid for payable, paid in zip(total_payable_all, total_paid_all)]
+        gap_area = [round(payable - paid, 2) for payable, paid in zip(total_payable_all, total_paid_all)]
         
         # Menyusun data untuk ECharts
         options = {
             "tooltip": {
                 "trigger": "axis",
-                "axisPointer": {
-                    "type": "cross"
-                }
+                "axisPointer": {"type": "cross"},
+                "formatter": lambda params: ''.join([f"{p['seriesName']}: ${p['data']:,.2f}<br>" for p in params])
             },
             "legend": {
                 "data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)"]
@@ -151,9 +150,7 @@ if generate_button:
                     "symbol": "circle",
                     "symbolSize": 8,
                     "itemStyle": {"color": "orange"},
-                    "lineStyle": {
-                        "type": "dashed"
-                    },
+                    "lineStyle": {"type": "dashed"},
                     "label": {
                         "show": True,
                         "position": "top",
@@ -165,14 +162,10 @@ if generate_button:
                     "type": "line",
                     "data": gap_area,
                     "smooth": True,
-                    "lineStyle": {"width": 0},  # Menghilangkan garis, hanya area
-                    "areaStyle": {
-                        "color": "rgba(211, 211, 211, 0.5)",  # Warna abu-abu transparan untuk area
-                    },
-                    "stack": "Total Paid (All Sources)",  # Membuat area hanya di antara dua garis
-                    "tooltip": {
-                        "show": False  # Menghilangkan tooltip untuk area gap
-                    }
+                    "lineStyle": {"width": 0},
+                    "areaStyle": {"color": "rgba(211, 211, 211, 0.5)"},
+                    "stack": "Total Paid (All Sources)",
+                    "tooltip": {"show": False}
                 }
             ]
         }
