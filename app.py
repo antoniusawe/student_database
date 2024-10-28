@@ -300,20 +300,34 @@ if generate_button:
         # Display the result to the user for analysis
         st.dataframe(channel_data)
 
-        fig = px.pie(
-            channel_data,
-            values=channel_data.values,
-            names=channel_data.index,
-            # title="Channel Data Distribution",
-            color_discrete_sequence=['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3'],
-            hole=0.3,  # Add this for a donut chart effect, optional
-        )
-
-        # Add percentage display and customize the start angle
-        fig.update_traces(textposition='inside', textinfo='percent+label', rotation=140)
-
-        # Show the plot in Streamlit
-        st.plotly_chart(fig)
+        # Menyusun data untuk ECharts
+        options = {
+            "tooltip": {"trigger": "item"},
+            "series": [
+                {
+                    "name": "Channel Distribution",
+                    "type": "pie",
+                    "radius": ["50%", "80%"],  # Radius lebih besar untuk ruang tambahan
+                    "avoidLabelOverlap": True,
+                    "label": {
+                        "show": True,
+                        "position": "outside",
+                        "formatter": "{b|{b}}\n{d}%",  # Pengaturan teks untuk menambah baris baru
+                        "rich": {  # Menggunakan rich text untuk mengatur label
+                            "b": {
+                                "width": 80,
+                                "overflow": "break"  # Memaksa teks turun jika terlalu panjang
+                            }
+                        }
+                    },
+                    "labelLine": {"show": True},  # Garis penghubung untuk label luar
+                    "data": [{"value": int(value), "name": str(name)} for name, value in zip(channel_data.index, channel_data.values)]
+                }
+            ]
+        }
+        
+        # Menampilkan chart
+        st_echarts(options=options)
 
         # Adding title
         # plt.title("Composition of Channels Used by Students to Initiate Enquiries (Cleaned)")
