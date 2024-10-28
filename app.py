@@ -95,38 +95,42 @@ if generate_button:
         gap = total_payable_all - total_paid_all
 
         
+        # Calculate the gap between total_payable_all and total_paid_all
+        gap_area = [payable - paid for payable, paid in zip(total_payable_all, total_paid_all)]
+        gap_y = [paid + gap for paid, gap in zip(total_paid_all, gap_area)]
+
         # Create an interactive plot with Plotly
         fig = go.Figure()
 
         # Plot the Total Paid line
         fig.add_trace(go.Scatter(
-        x=batch_dates, y=total_paid_all, mode='lines+markers+text', name="Total Paid (All Sources)",
-        line=dict(color='blue'), marker=dict(color='blue'),
-        text=[f'{val:.0f}' for val in total_paid_all], textposition="top center", textfont=dict(size=8)
+            x=batch_dates, y=total_paid_all, mode='lines+markers+text', name="Total Paid (All Sources)",
+            line=dict(color='blue'), marker=dict(color='blue'),
+            text=[f'{val:.0f}' for val in total_paid_all], textposition="top center", textfont=dict(size=8)
         ))
-
+        
         # Plot the Total Payable line
         fig.add_trace(go.Scatter(
-        x =batch_dates, y=total_payable_all, mode='lines+markers+text', name="Total Payable (in USD or USD equiv)",
-        line=dict(color='orange', dash='dash'), marker=dict(color='orange'),
-        text=[f'{val:.0f}' for val in total_payable_all], textposition="top center", textfont=dict(size=8)
+            x=batch_dates, y=total_payable_all, mode='lines+markers+text', name="Total Payable (in USD or USD equiv)",
+            line=dict(color='orange', dash='dash'), marker=dict(color='orange'),
+            text=[f'{val:.0f}' for val in total_payable_all], textposition="top center", textfont=dict(size=8)
         ))
-
-        # Fill the area between the two lines
+        
+        # Fill the gap area between the Total Paid and Total Payable lines
         fig.add_trace(go.Scatter(
             x=batch_dates + batch_dates[::-1],
-            y=total_paid_all + total_payable_all[::-1],
+            y=total_paid_all + gap_y[::-1],
             fill='toself', fillcolor='rgba(178, 180, 163, 0.3)', line=dict(color='rgba(255,255,255,0)'),
             hoverinfo="skip", showlegend=False  # Skip hover info for the fill and hide from legend
         ))
-
+        
         # Add data labels for the gap (difference) in red color
-        for i, g in enumerate(gap):
+        for i, g in enumerate(gap_area):
             fig.add_trace(go.Scatter(
-                x=[batch_dates[i]], y=[(total_paid_all[i] + total_payable_all[i]) / 2], 
+                x=[batch_dates[i]], y=[total_paid_all[i] + g / 2], 
                 mode="text", text=f'{g:.0f}', textfont=dict(color='red', size=8), showlegend=False
-        ))
-
+            ))
+        
         # Update layout for labels, axis titles, and sizing
         fig.update_layout(
             title="Total Paid vs. Total Payable",
@@ -137,7 +141,7 @@ if generate_button:
             legend=dict(yanchor="top", y=0.99, xanchor="left", x=0.01),
             height=600,
         )
-
+        
         # Show the interactive plot in Streamlit
         st.plotly_chart(fig)
 
