@@ -113,12 +113,10 @@ if generate_button:
         
         # Fill the gap area directly using the gap (Student still to pay) values
         fig.add_trace(go.Scatter(
-            x=batch_dates + batch_dates[::-1],
-            y=total_paid_all + (total_paid_all[::-1] + gap[::-1]),
-            fill='toself', fillcolor='rgba(178, 180, 163, 0.3)', line=dict(color='rgba(255,255,255,0)'),
-            hoverinfo="skip", showlegend=False  # Skip hover info for the fill and hide from legend
+            x=batch_dates, y=gap, fill='tozeroy', name="Gap (Student still to pay)",
+            mode='none', fillcolor='rgba(178, 180, 163, 0.3)', hoverinfo="skip", showlegend=False
         ))
-
+        
         # Add data labels for the gap (difference) in red color
         for i, g in enumerate(gap):
             fig.add_trace(go.Scatter(
