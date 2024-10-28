@@ -32,27 +32,26 @@ if generate_button:
         df_200hr_stud = pd.read_excel(url)
         st.dataframe(df_200hr_stud)
                 
-        # Grouping the data
+        # Grouping the data hanya berdasarkan 'Batch start date' dan 'Batch end date'
         batch_booking_source_200hr = df_200hr_stud.groupby(
-            ['Batch start date', 'Batch end date', 'Booking source']
+            ['Batch start date', 'Batch end date']
         ).agg({
             'Total Payable (in USD or USD equiv)': 'sum',
             'Total paid (as of today)': 'sum',
             'Student still to pay': 'sum'
-        })
+        }).reset_index()
 
-        # Sorting by 'Batch start date' and 'Batch end date'
-        batch_booking_source_200hr = batch_booking_source_200hr.sort_index(level=[0, 1])
+        # Mengurutkan berdasarkan 'Batch start date' untuk memastikan data terurut dalam grafik
+        batch_booking_source_200hr['Batch start date'] = pd.to_datetime(batch_booking_source_200hr['Batch start date'])
+        batch_booking_source_200hr = batch_booking_source_200hr.sort_values(by='Batch start date')
+
+        # Menampilkan hasil grouping yang sudah diurutkan
         st.subheader("Total Payable x Total Paid x Student still to pay (Sorted)")
         st.dataframe(batch_booking_source_200hr)
 
-        # Mengambil 'Batch start date' dan 'Batch end date' dan konversi ke string
-        batch_start_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
-        batch_end_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch end date'))
-        
         # Membuat label tanggal untuk sumbu X
         batch_dates = [f"{start.strftime('%B %d, %Y')} to {end.strftime('%B %d, %Y')}" 
-                       for start, end in zip(batch_start_dates, batch_end_dates)]
+                       for start, end in zip(batch_booking_source_200hr['Batch start date'], batch_booking_source_200hr['Batch end date'])]
 
         # Ambil data Total paid dan Total payable
         total_payable_all = batch_booking_source_200hr['Total Payable (in USD or USD equiv)']
@@ -126,14 +125,18 @@ if generate_button:
         df_300hr_stud = pd.read_excel(url)
         st.dataframe(df_300hr_stud)
 
-        # Grouping the data sesuai dengan instruksi Anda
+        # Grouping the data hanya berdasarkan 'Batch start date' dan 'Batch end date'
         batch_booking_source_300hr = df_300hr_stud.groupby(
-            ['Batch start date', 'Batch end date', 'Booking source']
+            ['Batch start date', 'Batch end date']
         ).agg({
             'Total Payable (in USD or USD equiv)': 'sum',
             'Total paid (as of today)': 'sum',
             'Student still to pay': 'sum'
-        }).sort_index(level=[0, 1])
+        }).reset_index()
+
+        # Mengurutkan berdasarkan 'Batch start date' untuk memastikan data terurut dalam grafik
+        batch_booking_source_300hr['Batch start date'] = pd.to_datetime(batch_booking_source_300hr['Batch start date'])
+        batch_booking_source_300hr = batch_booking_source_300hr.sort_values(by='Batch start date')
 
         # Menampilkan hasil grouping yang sudah diurutkan
         st.subheader("Total Payable x Total Paid x Student still to pay (Sorted)")
