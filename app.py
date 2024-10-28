@@ -24,10 +24,7 @@ st.image("https://raw.githubusercontent.com/antoniusawe/student_database/main/im
 # home
 st.title("RYP Student Database")
 
-# Define the desired timezone (e.g., Asia/Jakarta)
-local_timezone = pytz.timezone("Asia/Jakarta")
-
-# Get the current time in the desired timezone
+local_timezone = pytz.timezone("Asia/Makassar")
 last_refresh = datetime.now(local_timezone).strftime("%Y-%m-%d %H:%M:%S")
 
 # Display the last refresh time
