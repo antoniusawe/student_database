@@ -105,7 +105,7 @@ if generate_button:
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "valueFormatter": "${value.toFixed(2)}"  # Format langsung pada tooltip
+                "formatter": "${c}"  # Format tooltip secara langsung tanpa fungsi tambahan
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable"]
@@ -121,7 +121,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": "${value.toLocaleString()}"  # Format untuk y-axis dengan pemisah ribuan
+                    "formatter": "${value}"  # Format untuk y-axis secara langsung tanpa fungsi tambahan
                 }
             },
             "series": [
@@ -137,7 +137,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@[2].toLocaleString()}"  # Format angka dengan pemisah ribuan
+                        "formatter": "${c}"  # Format angka pada label tanpa tambahan fungsi
                     }
                 },
                 {
@@ -153,7 +153,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@[2].toLocaleString()}"  # Format angka dengan pemisah ribuan
+                        "formatter": "${c}"  # Format angka pada label tanpa tambahan fungsi
                     }
                 }
             ]
