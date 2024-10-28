@@ -29,7 +29,8 @@ def get_last_refresh_from_github(url):
         return last_modified_dt.strftime("%Y-%m-%d %H:%M:%S")
     else:
         return "Last modified date not available"
-
+        
+file_200hr_url = "https://raw.githubusercontent.com/antoniusawe/student_database/main/student_database_200hr.xlsx"
 last_refresh_200hr = get_last_refresh_from_github(file_200hr_url)
 st.write(f"Last refresh: {last_refresh_200hr}")
 
