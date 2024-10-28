@@ -174,7 +174,7 @@ if generate_button:
         st_echarts(options=options)
         
         # Menampilkan Judul
-        st.write("Composition of Channels Used by Students to Initiate Enquiries (Cleaned)")
+        # st.write("Composition of Channels Used by Students to Initiate Enquiries (Cleaned)")
 
         # Adding the conclusion text at the bottom
         st.write("""
