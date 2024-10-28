@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib
 import plotly.express as px
 import requests
+import os
 
 # sidebar
 st.sidebar.title("RYP")  # Judul sidebar
