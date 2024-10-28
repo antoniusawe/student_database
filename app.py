@@ -46,18 +46,8 @@ if generate_button:
             'Student still to pay': 'sum'
         }).unstack(fill_value=0)
 
-        # Mengonversi index 'Batch start date' dan 'Batch end date' ke datetime agar dapat diurutkan
-        batch_booking_source_200hr.index = pd.MultiIndex.from_arrays([
-            pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date')),
-            pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch end date')),
-            batch_booking_source_200hr.index.get_level_values('Booking source')
-        ], names=['Batch start date', 'Batch end date', 'Booking source'])
-
-        # Mengurutkan DataFrame berdasarkan 'Batch start date' dan 'Batch end date'
-        batch_booking_source_200hr = batch_booking_source_200hr.sort_index(level=[0, 1])
-
-        # Menampilkan hasil grouping yang sudah diurutkan
-        st.subheader("Total Payable x Total Paid x Student still to pay (Sorted)")
+        # Menampilkan hasil grouping
+        st.subheader("Total Payable x Total Paid x Student still to pay")
         st.dataframe(batch_booking_source_200hr)
 
         # Chart 
