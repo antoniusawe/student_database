@@ -81,10 +81,6 @@ if generate_button:
         # Chart 
         st.subheader("Chart")
 
-        batch_start_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
-        batch_end_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch end date'))
-        
-        # Sort DataFrame berdasarkan periode batch
         batch_booking_source_sorted = batch_booking_source_200hr.copy()
         batch_booking_source_sorted = batch_booking_source_sorted.set_index([batch_start_dates, batch_end_dates])
         batch_booking_source_sorted = batch_booking_source_sorted.sort_index()
@@ -99,13 +95,24 @@ if generate_button:
         # Ambil data Total paid and Total payable
         total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1).round(2).tolist()
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).round(2).tolist()
+        gap_all = [round(payable - paid, 2) for payable, paid in zip(total_payable_all, total_paid_all)]
         
         # Menyusun data untuk ECharts
         options = {
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "formatter": "{b0}:<br />Total Paid: ${c0:,.2f}<br />Total Payable: ${c1:,.2f}"  # Menampilkan tooltip dengan format langsung
+                "formatter": """
+                function(params) {
+                    const totalPaid = params[0].data;
+                    const totalPayable = params[1].data;
+                    const gap = totalPayable - totalPaid;
+                    return `${params[0].axisValue}<br />
+                            Total Paid: $${totalPaid.toFixed(2)}<br />
+                            Total Payable: $${totalPayable.toFixed(2)}<br />
+                            Gap: $${gap.toFixed(2)}`;
+                }
+                """
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable"]
