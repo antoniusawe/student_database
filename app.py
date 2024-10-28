@@ -112,6 +112,7 @@ if generate_button:
 
         # Labeling the chart
         wrapped_labels = [label.replace(" to ", "\nto\n") for label in batch_dates]
+        wrapped_labels = [label.replace(" ", "\n", 1) for label in wrapped_labels]
         
         plt.xlabel("Batch Date Range (Start to End)")
         plt.ylabel("Amount")
