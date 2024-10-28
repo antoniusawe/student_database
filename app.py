@@ -151,13 +151,6 @@ if generate_button:
         # Adding title
         # plt.title("Composition of Channels Used by Students to Initiate Enquiries (Cleaned)")
 
-        # Equal aspect ratio ensures that the pie is drawn as a circle
-        plt.ylabel("")  # Removing the default ylabel for a cleaner look
-        plt.tight_layout()
-
-        # Show pie chart in Streamlit
-        st.pyplot(plt)
-
         # Adding the conclusion text at the bottom
         st.write("""
         **Direct (new student) - Self-aware of RYP or HOM** memiliki jumlah tertinggi, menunjukkan brand awareness yang kuat.
