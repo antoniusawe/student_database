@@ -21,7 +21,8 @@ st.image("https://raw.githubusercontent.com/antoniusawe/student_database/main/im
 
 # home
 st.title("RYP Student Database")
-st.write(f"Last refresh: 4 hours ago")
+last_refresh = datetime.now()
+st.write(f"Last refresh: {last_refresh}")
 
 # fungsi untuk button "Generate"
 if generate_button:
