@@ -123,6 +123,8 @@ if generate_button:
 
         # Use tight layout
         plt.tight_layout()
+        # Show the plot in Streamlit
+        st.pyplot(plt)
 
         # ------------------------
         # Checking unique values and counts in the column "What channel, with which student initiated enquiry?"
