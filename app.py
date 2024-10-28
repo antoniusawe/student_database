@@ -7,6 +7,7 @@ import plotly.express as px
 import requests
 import os
 from datetime import datetime
+import pytz
 
 # sidebar
 st.sidebar.title("RYP")  # Judul sidebar
@@ -22,7 +23,14 @@ st.image("https://raw.githubusercontent.com/antoniusawe/student_database/main/im
 
 # home
 st.title("RYP Student Database")
-last_refresh = datetime.now()
+
+# Define the desired timezone (e.g., Asia/Jakarta)
+local_timezone = pytz.timezone("Asia/Jakarta")
+
+# Get the current time in the desired timezone
+last_refresh = datetime.now(local_timezone).strftime("%Y-%m-%d %H:%M:%S")
+
+# Display the last refresh time
 st.write(f"Last refresh: {last_refresh}")
 
 # fungsi untuk button "Generate"
