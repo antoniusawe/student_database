@@ -157,7 +157,7 @@ if generate_button:
                 {
                     "name": "Channel Distribution",
                     "type": "pie",
-                    "radius": ["50%", "80%"],  # Radius lebih besar untuk ruang tambahan
+                    "radius": ["40%", "70%"],  # Radius lebih besar untuk ruang tambahan
                     "avoidLabelOverlap": True,
                     "label": {
                         "show": True,
