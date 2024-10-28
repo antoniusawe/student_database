@@ -101,16 +101,16 @@ if generate_button:
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).tolist()
         
         # Hitung gap antara Total Payable dan Total Paid untuk area
-        gap_area = [payable - paid if payable > paid else 0 for payable, paid in zip(total_payable_all, total_paid_all)]
+        gap_area = [payable - paid for payable, paid in zip(total_payable_all, total_paid_all)]
         
-        # Menyusun data untuk ECharts dalam format stacked area chart
+        # Menyusun data untuk ECharts tanpa stacking berlebihan
         options = {
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"}
             },
             "legend": {
-                "data": ["Total Paid", "Gap", "Total Payable"]
+                "data": ["Total Paid", "Total Payable"]
             },
             "xAxis": {
                 "type": "category",
@@ -131,46 +131,40 @@ if generate_button:
                     "name": "Total Paid",
                     "type": "line",
                     "data": total_paid_all,
-                    "stack": "Total",
                     "smooth": True,
                     "symbol": "circle",
                     "symbolSize": 8,
                     "itemStyle": {"color": "blue"},
-                    "areaStyle": {"color": "rgba(0, 0, 255, 0.2)"},  # Warna transparan biru untuk area Total Paid
+                    "areaStyle": {"color": "rgba(0, 0, 255, 0.2)"},
                     "label": {
                         "show": True,
                         "position": "top",
                         "formatter": "${c}"
-                    }
-                },
-                {
-                    "name": "Gap",
-                    "type": "line",
-                    "data": gap_area,
-                    "stack": "Total",
-                    "smooth": True,
-                    "itemStyle": {"color": "gray"},
-                    "areaStyle": {"color": "rgba(128, 128, 128, 0.3)"},  # Warna abu-abu transparan untuk area Gap
-                    "label": {
-                        "show": False  # Tidak perlu label pada gap
                     }
                 },
                 {
                     "name": "Total Payable",
                     "type": "line",
                     "data": total_payable_all,
-                    "stack": "Total",
                     "smooth": True,
                     "symbol": "circle",
                     "symbolSize": 8,
                     "itemStyle": {"color": "orange"},
-                    "areaStyle": {"color": "rgba(255, 165, 0, 0.3)"},  # Warna oranye transparan untuk area Total Payable
+                    "lineStyle": {"type": "dashed"},
                     "label": {
                         "show": True,
                         "position": "top",
                         "formatter": "${c}"
-                    },
-                    "lineStyle": {"type": "dashed"}  # Garis putus-putus untuk Total Payable
+                    }
+                },
+                {
+                    "name": "Gap Area",
+                    "type": "line",
+                    "data": gap_area,
+                    "smooth": True,
+                    "lineStyle": {"width": 0},  # Menghilangkan garis, hanya area
+                    "areaStyle": {"color": "rgba(128, 128, 128, 0.3)"},
+                    "tooltip": {"show": False}
                 }
             ]
         }
