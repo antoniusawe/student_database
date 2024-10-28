@@ -100,9 +100,6 @@ if generate_button:
         total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1).tolist()
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).tolist()
         
-        # Hitung gap antara Total Payable dan Total Paid
-        gap = [payable - paid for payable, paid in zip(total_payable_all, total_paid_all)]
-        
         # Menyusun data untuk ECharts
         options = {
             "tooltip": {
@@ -141,7 +138,8 @@ if generate_button:
                         "show": True,
                         "position": "top",
                         "formatter": "${c}"
-                    }
+                    },
+                    "areaStyle": {"color": "rgba(173, 216, 230, 0.3)"},  # Area fill untuk Total Paid
                 },
                 {
                     "name": "Total Payable (in USD or USD equiv)",
@@ -158,21 +156,8 @@ if generate_button:
                         "show": True,
                         "position": "top",
                         "formatter": "${c}"
-                    }
-                },
-                {
-                    "name": "Gap",
-                    "type": "line",
-                    "data": gap,
-                    "stack": "Total",
-                    "lineStyle": {"width": 0},
-                    "areaStyle": {"color": "#b2b4a3", "opacity": 0.3},
-                    "emphasis": {
-                        "focus": "series"
                     },
-                    "tooltip": {
-                        "formatter": "Gap: ${c}"
-                    }
+                    "areaStyle": {"color": "rgba(255, 165, 0, 0.3)"},  # Area fill untuk Total Payable, menempel di atas garis Total Paid
                 }
             ]
         }
