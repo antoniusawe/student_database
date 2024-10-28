@@ -153,22 +153,18 @@ if generate_button:
         # Menyusun data untuk ECharts
         options = {
             "tooltip": {"trigger": "item"},
-            "legend": {
-                "top": "middle",
-                "left": "right"  # Memindahkan legenda ke kanan agar tidak mengganggu
-            },
             "series": [
                 {
                     "name": "Channel Distribution",
                     "type": "pie",
-                    "radius": ["50%", "80%"],  # Membuat radius lebih besar agar ada ruang di dalam
+                    "radius": ["50%", "80%"],  # Radius lebih besar untuk ruang tambahan
                     "avoidLabelOverlap": True,
                     "label": {
                         "show": True,
-                        "position": "outside",  # Memindahkan label ke luar
+                        "position": "outside",  # Memindahkan label ke luar pie chart
                         "formatter": "{b}: {d}%"  # Menampilkan nama dan persentase
                     },
-                    "labelLine": {"show": True},  # Menampilkan garis penghubung untuk label luar
+                    "labelLine": {"show": True},  # Garis penghubung untuk label luar
                     "data": [{"value": int(value), "name": str(name)} for name, value in zip(channel_data.index, channel_data.values)]
                 }
             ]
