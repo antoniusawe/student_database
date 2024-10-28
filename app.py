@@ -125,7 +125,7 @@ if generate_button:
         # Mengisi area antara garis Total Paid dan Total Payable
         fig.add_trace(go.Scatter(
             x=batch_dates + batch_dates[::-1],  # Mengisi area dengan dua kali data untuk mengisi di antara garis
-            y=total_payable_all - total_paid_all[::-1],
+            y=gap[::-1],
             fill='toself',
             fillcolor='rgba(178, 180, 163, 0.3)',
             line=dict(color='rgba(255,255,255,0)'),
