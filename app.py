@@ -60,18 +60,18 @@ if generate_button:
         batch_booking_source_sorted = batch_booking_source_sorted.set_index([batch_start_dates, batch_end_dates])
         batch_booking_source_sorted = batch_booking_source_sorted.sort_index()
 
-        # Convert the sorted dates back to the desired string format for display purposes
+        # convert datetime ke string format untuk visualisasi
         batch_start_dates_sorted = batch_booking_source_sorted.index.get_level_values(0).strftime('%B %d, %Y')
         batch_end_dates_sorted = batch_booking_source_sorted.index.get_level_values(1).strftime('%B %d, %Y')
 
-        # Combine start and end dates for x-axis labels
+        # combine "Batch start date" dan "Batch end date"
         batch_dates = [f"{start} to {end}" for start, end in zip(batch_start_dates_sorted, batch_end_dates_sorted)]
 
-        # Extract the data for Total paid and Total payable across all sources
+        # ambil data Total paid and Total payable
         total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1)
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1)
 
-        # Calculate the gap between Total Payable and Total Paid
+        # calculate the gap antara Total Payable dan Total Paid
         gap = total_payable_all - total_paid_all
 
         # Plot the lines
