@@ -111,16 +111,19 @@ if generate_button:
             text=[f'{val:.0f}' for val in total_payable_all], textposition="top center", textfont=dict(size=8)
         ))
         
-        # Fill the gap area directly using the gap (Student still to pay) values
+        # Fill the area between Total Paid and Total Payable
         fig.add_trace(go.Scatter(
-            x=batch_dates, y=gap, fill='tozeroy', name="Gap (Student still to pay)",
-            mode='none', fillcolor='rgba(178, 180, 163, 0.3)', hoverinfo="skip", showlegend=False
+            x=batch_dates + batch_dates[::-1],  # Duplicate batch_dates to close the shape
+            y=total_paid_all + total_payable_all[::-1],  # Start from Total Paid up to Total Payable
+            fill='toself', fillcolor='rgba(178, 180, 163, 0.3)', line=dict(color='rgba(255,255,255,0)'),
+            hoverinfo="skip", showlegend=False  # Skip hover info for the fill and hide from legend
         ))
         
-        # Add data labels for the gap (difference) in red color
+        # Add data labels for the gap (difference) in red color at the midpoint
         for i, g in enumerate(gap):
+            midpoint_y = total_paid_all[i] + g / 2
             fig.add_trace(go.Scatter(
-                x=[batch_dates[i]], y=[total_paid_all[i] + g / 2], 
+                x=[batch_dates[i]], y=[midpoint_y], 
                 mode="text", text=f'{g:.0f}', textfont=dict(color='red', size=8), showlegend=False
             ))
         
