@@ -91,9 +91,9 @@ if generate_button:
         total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1)
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1)
 
-        # calculate the gap antara Total Payable dan Total Paid
-        gap = batch_booking_source_sorted['Student still to pay'].sum(axis=1)
-
+        # Calculate the gap as the difference between Total Payable and Total Paid
+        gap = [payable - paid for payable, paid in zip(total_payable_all, total_paid_all)]
+        
         # Create an interactive plot with Plotly
         fig = go.Figure()
         
@@ -110,20 +110,20 @@ if generate_button:
             line=dict(color='orange', dash='dash'), marker=dict(color='orange'),
             text=[f'{val:.0f}' for val in total_payable_all], textposition="top center", textfont=dict(size=8)
         ))
-    
-        # Calculate the gap area between Total Paid and Total Payable
-        gap_y = [payable - paid for payable, paid in zip(total_payable_all, total_paid_all)]
         
-        # Fill the area between Total Paid and Total Payable
+        # Define the y-values for the upper boundary of the filled area by adding gap to Total Paid
+        gap_upper_boundary = [paid + g for paid, g in zip(total_paid_all, gap)]
+        
+        # Fill the area between Total Paid and Total Payable using the calculated gap
         fig.add_trace(go.Scatter(
-            x=batch_dates + batch_dates[::-1],  # Duplicate dates to create a closed shape
-            y=total_paid_all + total_payable_all[::-1],  # Start from Total Paid up to Total Payable
+            x=batch_dates + batch_dates[::-1],  # Duplicate batch_dates to create a closed shape
+            y=total_paid_all + gap_upper_boundary[::-1],  # Lower boundary: total_paid_all; upper boundary: total_paid_all + gap
             fill='toself', fillcolor='rgba(178, 180, 163, 0.3)', line=dict(color='rgba(255,255,255,0)'),
             hoverinfo="skip", showlegend=False  # Skip hover info for the fill and hide from legend
         ))
         
-        # Add data labels for the gap (difference) in red color
-        for i, g in enumerate(gap_y):
+        # Add data labels for the gap (difference) in red color at the midpoint
+        for i, g in enumerate(gap):
             midpoint_y = total_paid_all[i] + g / 2
             fig.add_trace(go.Scatter(
                 x=[batch_dates[i]], y=[midpoint_y], 
