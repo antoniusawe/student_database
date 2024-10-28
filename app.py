@@ -92,16 +92,11 @@ if generate_button:
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1)
 
         # calculate the gap antara Total Payable dan Total Paid
-        gap = total_payable_all - total_paid_all
-
-        
-        # Calculate the gap between total_payable_all and total_paid_all
-        gap_area = [payable - paid for payable, paid in zip(total_payable_all, total_paid_all)]
-        gap_y = [paid + gap for paid, gap in zip(total_paid_all, gap_area)]
+        gap = batch_booking_source_sorted['Student still to pay'].sum(axis=1)
 
         # Create an interactive plot with Plotly
         fig = go.Figure()
-
+        
         # Plot the Total Paid line
         fig.add_trace(go.Scatter(
             x=batch_dates, y=total_paid_all, mode='lines+markers+text', name="Total Paid (All Sources)",
@@ -116,6 +111,9 @@ if generate_button:
             text=[f'{val:.0f}' for val in total_payable_all], textposition="top center", textfont=dict(size=8)
         ))
         
+        # Calculate the y-values for the filled gap area by adding the gap to Total Paid
+        gap_y = [paid + g for paid, g in zip(total_paid_all, gap)]
+        
         # Fill the gap area between the Total Paid and Total Payable lines
         fig.add_trace(go.Scatter(
             x=batch_dates + batch_dates[::-1],
@@ -125,7 +123,7 @@ if generate_button:
         ))
         
         # Add data labels for the gap (difference) in red color
-        for i, g in enumerate(gap_area):
+        for i, g in enumerate(gap):
             fig.add_trace(go.Scatter(
                 x=[batch_dates[i]], y=[total_paid_all[i] + g / 2], 
                 mode="text", text=f'{g:.0f}', textfont=dict(color='red', size=8), showlegend=False
