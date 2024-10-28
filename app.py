@@ -116,7 +116,7 @@ if generate_button:
 
         plt.xlabel("Batch Date Range (Start to End)")
         plt.ylabel("Amount")
-        plt.xticks(ticks=range(len(batch_dates)), labels=wrapped_labels, rotation=90, ha="center")
+        plt.xticks(ticks=range(len(batch_dates)), labels=wrapped_labels, rotation=0, ha="center", fontsize=8)
         plt.ylim(0, max(total_payable_all) * 1.1)  # Add some padding on top
         plt.legend()
 
