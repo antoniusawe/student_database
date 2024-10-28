@@ -6,3 +6,4 @@ streamlit-echarts
 plotly
 requests
 datetime
+python-dateutil
