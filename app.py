@@ -288,10 +288,7 @@ if generate_button:
 
         # Equal aspect ratio ensures that the pie is drawn as a circle
         plt.ylabel("")  # Removing the default ylabel for a cleaner look
-        plt.tight_layout()
 
-        # Show pie chart in Streamlit
-        st.pyplot(plt)
 
         # Adding the conclusion text at the bottom
         st.write("""
