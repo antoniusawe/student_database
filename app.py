@@ -53,8 +53,8 @@ def format_relative_time(past_time):
         return f"{delta.minutes} minutes ago"
     else:
         return "Just now"
-        
-last_refresh_200hr = get_last_commit_time(file_200hr_path)
+  
+last_refresh_200hr = get_last_commit_time(file_200hr_url)
 st.write(f"Last refresh for 200-hour data: {last_refresh_200hr}")
 
 # fungsi untuk button "Generate"
