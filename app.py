@@ -3,20 +3,20 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
-# Sidebar dengan judul dan dropdown
+# sidebar
 st.sidebar.title("RYP")  # Judul sidebar
 option = st.sidebar.selectbox(  # Dropdown di sidebar
     "Choose HR Option:",  # Teks label dropdown
     ["Select an option", "200HR", "300HR"]  # Opsi dalam dropdown
 )
 
-# Tambahkan tombol "Generate" di bawah dropdown
+# button "Generate"
 generate_button = st.sidebar.button("Generate")
 
-# Halaman utama
+# home
 st.title("2025 RYP Student Database")
 
-# Jika tombol "Generate" ditekan
+# fungsi untuk button "Generate"
 if generate_button:
     # Jika belum memilih atau pilihannya masih 'Select an option'
     if option == "Select an option":
@@ -35,7 +35,7 @@ if generate_button:
         # Menampilkan data dalam bentuk tabel
         st.dataframe(df_200hr_stud)
 
-        # Grouping the data sesuai dengan instruksi Anda
+        # Grouping the data
         batch_booking_source_200hr = df_200hr_stud.groupby(
             ['Batch start date', 'Batch end date', 'Booking source']
         ).agg({
