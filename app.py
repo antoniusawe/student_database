@@ -51,7 +51,12 @@ if generate_button:
         }).unstack(fill_value=0)
 
         batch_booking_source_200hr = batch_booking_source_200hr.sort_index(level='Batch start date', ascending=True)
-
+        batch_booking_source_200hr_corrected_sorted.index = batch_booking_source_200hr_corrected_sorted.index.set_levels(
+            [batch_booking_source_200hr_corrected_sorted.index.levels[0].strftime('%B %d, %Y'),
+             batch_booking_source_200hr_corrected_sorted.index.levels[1].strftime('%B %d, %Y')],
+            level=['Batch start date', 'Batch end date']
+        )
+        
         # Menampilkan hasil grouping
         st.subheader("Total Payable x Total Paid x Student still to pay")
         st.dataframe(batch_booking_source_200hr)
