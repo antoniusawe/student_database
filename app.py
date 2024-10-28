@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib
+import plotly.express as px
 
 # sidebar
 st.sidebar.title("RYP")  # Judul sidebar
@@ -135,9 +136,20 @@ if generate_button:
         # Display the result to the user for analysis
         st.dataframe(channel_data)
 
-        # Plotting the cleaned channel data in a pie chart
-        plt.figure(figsize=(8, 8))
-        channel_data.plot(kind='pie', autopct='%1.1f%%', startangle=140, colors=['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3'])
+        fig = px.pie(
+            channel_data,
+            values=channel_data.values,
+            names=channel_data.index,
+            title="Channel Data Distribution",
+            color_discrete_sequence=['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3'],
+            hole=0.3,  # Add this for a donut chart effect, optional
+        )
+
+# Add percentage display and customize the start angle
+fig.update_traces(textposition='inside', textinfo='percent+label', rotation=140)
+
+# Show the plot in Streamlit
+st.plotly_chart(fig)  
 
         # Adding title
         # plt.title("Composition of Channels Used by Students to Initiate Enquiries (Cleaned)")
