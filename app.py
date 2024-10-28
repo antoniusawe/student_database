@@ -37,6 +37,9 @@ if generate_button:
         # Menampilkan data dalam bentuk tabel
         st.dataframe(df_200hr_stud)
 
+        df_200hr_stud['Batch start date'] = pd.to_datetime(df_200hr_stud['Batch start date'])
+        df_200hr_stud['Batch end date'] = pd.to_datetime(df_200hr_stud['Batch end date'])    
+        
         # Grouping the data
         batch_booking_source_200hr = df_200hr_stud.groupby(
             ['Batch start date', 'Batch end date', 'Booking source']
