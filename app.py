@@ -101,12 +101,12 @@ if generate_button:
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).round(2).tolist()
         gap_all = [round(payable - paid, 2) for payable, paid in zip(total_payable_all, total_paid_all)]
         
-        # Menyusun data untuk ECharts tanpa formatter kompleks
+        # Menyusun data untuk ECharts
         options = {
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "formatter": "{b}: <br>Total Paid: ${c0:.2f}<br>Total Payable: ${c1:.2f}<br>Gap: ${c2:.2f}"  # Menggunakan format string yang sederhana
+                "formatter": """{b0}<br />Total Paid: ${c0}<br />Total Payable: ${c1}<br />Gap: ${c2}"""  # Menampilkan tooltip dengan format sederhana
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable", "Gap"]
@@ -122,7 +122,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": "${value:,.0f}"  # Format untuk y-axis dengan pemisah ribuan
+                    "formatter": "${value}"  # Format untuk y-axis sebagai mata uang
                 }
             },
             "series": [
@@ -138,7 +138,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@:.2f}"  # Format angka pada label dengan dua desimal
+                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
                     }
                 },
                 {
@@ -154,7 +154,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@:.2f}"  # Format angka pada label dengan dua desimal
+                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
                     }
                 },
                 {
@@ -166,9 +166,10 @@ if generate_button:
                     "areaStyle": {"color": "rgba(128, 128, 128, 0.3)"},  # Area transparan untuk Gap
                     "label": {
                         "show": True,
-                        "position": "inside",  # Mengatur posisi label di tengah area Gap
-                        "formatter": "${@:.2f}"  # Format angka pada label dengan dua desimal
-                    }
+                        "position": "top",
+                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
+                    },
+                    "tooltip": {"show": False}  # Tidak perlu tooltip terpisah untuk Gap
                 }
             ]
         }
