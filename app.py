@@ -100,10 +100,7 @@ if generate_button:
         total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1).tolist()
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).tolist()
         
-        # Hitung gap antara Total Payable dan Total Paid untuk area
-        gap_area = [payable - paid for payable, paid in zip(total_payable_all, total_paid_all)]
-        
-        # Menyusun data untuk ECharts tanpa stacking berlebihan
+        # Menyusun data untuk ECharts
         options = {
             "tooltip": {
                 "trigger": "axis",
@@ -140,7 +137,8 @@ if generate_button:
                         "show": True,
                         "position": "top",
                         "formatter": "${c}"
-                    }
+                    },
+                    "stack": "Total",  # Untuk memastikan area stack ke bawah (dasar area)
                 },
                 {
                     "name": "Total Payable",
@@ -151,20 +149,13 @@ if generate_button:
                     "symbolSize": 8,
                     "itemStyle": {"color": "orange"},
                     "lineStyle": {"type": "dashed"},
+                    "areaStyle": {"color": "rgba(255, 165, 0, 0.3)"},  # Warna transparan di atas garis biru untuk Gap
                     "label": {
                         "show": True,
                         "position": "top",
                         "formatter": "${c}"
-                    }
-                },
-                {
-                    "name": "Gap Area",
-                    "type": "line",
-                    "data": gap_area,
-                    "smooth": True,
-                    "lineStyle": {"width": 0},  # Menghilangkan garis, hanya area
-                    "areaStyle": {"color": "rgba(128, 128, 128, 0.3)"},
-                    "tooltip": {"show": False}
+                    },
+                    "stack": "Total"  # Untuk memastikan area stack ke atas (menyusun Gap)
                 }
             ]
         }
