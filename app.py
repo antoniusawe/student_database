@@ -20,6 +20,22 @@ st.image("https://raw.githubusercontent.com/antoniusawe/student_database/main/im
 # home
 st.title("RYP Student Database")
 
+# Function to get the last refresh from GitHub URL
+def get_last_refresh_from_github(url):
+    response = requests.head(url)
+    if 'Last-Modified' in response.headers:
+        last_modified = response.headers['Last-Modified']
+        last_modified_dt = datetime.strptime(last_modified, '%a, %d %b %Y %H:%M:%S %Z')
+        return last_modified_dt.strftime("%Y-%m-%d %H:%M:%S")
+    else:
+        return "Last modified date not available"
+
+last_refresh_200hr = get_last_refresh_from_github(file_200hr_url)
+st.write(f"Last refresh: {last_refresh_200hr}")
+
+# URLs to your Excel files
+file_200hr_url = "https://raw.githubusercontent.com/antoniusawe/student_database/main/student_database_200hr.xlsx"
+
 # fungsi untuk button "Generate"
 if generate_button:
     # Jika belum memilih atau pilihannya masih 'Select an option'
