@@ -38,7 +38,9 @@ if generate_button:
         st.dataframe(df_200hr_stud)
 
         df_200hr_stud['Batch start date'] = pd.to_datetime(df_200hr_stud['Batch start date'])
-        df_200hr_stud['Batch end date'] = pd.to_datetime(df_200hr_stud['Batch end date'])    
+        df_200hr_stud['Batch end date'] = pd.to_datetime(df_200hr_stud['Batch end date'])
+        df_200hr_stud['Batch start date'] = df_200hr_stud['Batch start date'].index.get_level_values(0).strftime('%B %d, %Y')
+        df_200hr_stud['Batch end date'] = df_200hr_stud['Batch end date'].index.get_level_values(1).strftime('%B %d, %Y')
         
         # Grouping the data
         batch_booking_source_200hr = df_200hr_stud.groupby(
