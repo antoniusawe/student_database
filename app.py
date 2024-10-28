@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib
 import plotly.express as px
+import plotly.graph_objects as go
 
 # sidebar
 st.sidebar.title("RYP")  # Judul sidebar
