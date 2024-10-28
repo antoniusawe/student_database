@@ -149,23 +149,34 @@ if generate_button:
         # Display the result to the user for analysis
         st.dataframe(channel_data)
 
+        # Pilih Warna Secara Dinamis
+        color_options = {
+            'Default': ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3'],
+            'Option 1': ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728'],
+            'Option 2': ['#9467bd', '#8c564b', '#e377c2', '#7f7f7f']
+        }
+        selected_color = st.selectbox("Pilih Skema Warna", options=list(color_options.keys()))
+        
+        # Pilih Hole untuk Donut Effect
+        hole_size = st.slider("Ukuran Hole (Donut)", 0.0, 0.5, 0.3)
+        
+        # Buat pie chart
         fig = px.pie(
             channel_data,
-            values=channel_data.values,
+            values=channel_data['Count'],
             names=channel_data.index,
-            # title="Channel Data Distribution",
-            color_discrete_sequence=['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3'],
-            hole=0.3,  # Add this for a donut chart effect, optional
+            color_discrete_sequence=color_options[selected_color],
+            hole=hole_size
         )
-
-        # Add percentage display and customize the start angle
+        
+        # Customize text position and angle
         fig.update_traces(textposition='inside', textinfo='percent+label', rotation=140)
-
-        # Show the plot in Streamlit
-        st.plotly_chart(fig)  
-
-        # Adding title
-        # plt.title("Composition of Channels Used by Students to Initiate Enquiries (Cleaned)")
+        
+        # Tampilkan chart
+        st.plotly_chart(fig)
+        
+        # Menampilkan Judul
+        st.write("Composition of Channels Used by Students to Initiate Enquiries (Cleaned)")
 
         # Adding the conclusion text at the bottom
         st.write("""
