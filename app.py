@@ -88,7 +88,7 @@ if generate_button:
             plt.annotate(f'{txt:.0f}', (batch_dates[i], total_payable_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='orange')
 
         # Fill the gap between the lines with a color
-        plt.fill_between(batch_dates, total_paid_all, total_payable_all, color='grey', alpha=0.3)
+        plt.fill_between(batch_dates, total_paid_all, total_payable_all, color='#b2b4a3', alpha=0.3)
 
         # Add data labels for the gap (difference)
         for i, g in enumerate(gap):
