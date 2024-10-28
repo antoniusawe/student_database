@@ -239,6 +239,8 @@ if generate_button:
             plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid_all[i] + total_payable_all[i]) / 2), 
                          textcoords="offset points", xytext=(0,0), ha='center', color='red', fontsize=8)
 
+        wrapped_labels = [label.replace(" to ", "\nto\n") for label in batch_dates]
+        wrapped_labels = [label.replace(" ", "\n", 1) for label in wrapped_labels]
         
         # Labeling the chart
         plt.xlabel("Batch Date Range (Start to End)")
