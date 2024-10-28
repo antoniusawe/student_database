@@ -161,9 +161,14 @@ if generate_button:
                     "avoidLabelOverlap": True,
                     "label": {
                         "show": True,
-                        "position": "outside",  # Memindahkan label ke luar pie chart
-                        "formatter": lambda params: f"{params['name'][:20]}...\n{params['value']}%",  # Memotong label dan menambahkan baris baru
-                        "overflow": "break"  # Pengaturan untuk memaksa teks turun jika terlalu panjang
+                        "position": "outside",
+                        "formatter": "{b|{b}}\n{d}%",  # Pengaturan teks untuk menambah baris baru
+                        "rich": {  # Menggunakan rich text untuk mengatur label
+                            "b": {
+                                "width": 80,
+                                "overflow": "break"  # Memaksa teks turun jika terlalu panjang
+                            }
+                        }
                     },
                     "labelLine": {"show": True},  # Garis penghubung untuk label luar
                     "data": [{"value": int(value), "name": str(name)} for name, value in zip(channel_data.index, channel_data.values)]
