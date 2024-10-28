@@ -87,6 +87,8 @@ if generate_button:
         # calculate the gap antara Total Payable dan Total Paid
         gap = total_payable_all - total_paid_all
 
+        matplotlib.rcParams['font.family'] = 'Arial'
+        
         # Plot the lines
         plt.figure(figsize=(10, 6))
         plt.plot(batch_dates, total_paid_all, label="Total Paid (All Sources)", marker='o', color='blue')
