@@ -105,7 +105,7 @@ if generate_button:
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "formatter": lambda params: ''.join([f"{p['seriesName']}: ${p['data']:,.2f}<br>" for p in params])
+                "valueFormatter": "{value:.2f}"  # Format langsung pada tooltip
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable"]
@@ -137,7 +137,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@[2]:,.2f}"  # Format angka dengan dua desimal
+                        "formatter": "${@value:.2f}"  # Format angka dengan dua desimal
                     }
                 },
                 {
@@ -153,7 +153,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@[2]:,.2f}"  # Format angka dengan dua desimal
+                        "formatter": "${@value:.2f}"  # Format angka dengan dua desimal
                     }
                 }
             ]
