@@ -21,38 +21,17 @@ st.image("https://raw.githubusercontent.com/antoniusawe/student_database/main/im
 # home
 st.title("RYP Student Database")
 
-# Function to get the last commit timestamp for a file from GitHub API
-def get_last_refresh_from_github_api(file_path):
-    api_url = f"https://api.github.com/repos/antoniusawe/student_database/commits?path={file_path}&page=1&per_page=1"
-    response = requests.get(api_url)
-    if response.status_code == 200:
-        commit_data = response.json()
-        if commit_data:
-            last_commit_date = commit_data[0]['commit']['committer']['date']
-            last_commit_dt = datetime.strptime(last_commit_date, '%Y-%m-%dT%H:%M:%SZ')
-            return get_relative_time(last_commit_dt)
-    return "Last modified date not available"
-
-# Function to calculate relative time (e.g., "4 hours ago")
-def get_relative_time(past_time):
-    now = datetime.utcnow()
-    delta = relativedelta(now, past_time)
-    
-    if delta.years > 0:
-        return f"{delta.years} years ago"
-    elif delta.months > 0:
-        return f"{delta.months} months ago"
-    elif delta.days > 0:
-        return f"{delta.days} days ago"
-    elif delta.hours > 0:
-        return f"{delta.hours} hours ago"
-    elif delta.minutes > 0:
-        return f"{delta.minutes} minutes ago"
-    else:
-        return "Just now"
+# Function to get the last modification time of a file in the current environment
+def get_last_refresh_local(file_path):
+    try:
+        timestamp = os.path.getmtime(file_path)
+        last_modified_dt = datetime.fromtimestamp(timestamp)
+        return last_modified_dt.strftime("%Y-%m-%d %H:%M:%S")
+    except FileNotFoundError:
+        return "File not found"
         
 file_200hr_url = "https://raw.githubusercontent.com/antoniusawe/student_database/main/student_database_200hr.xlsx"
-last_refresh_200hr = get_last_refresh_from_github_api(file_200hr_url)
+last_refresh_200hr = get_last_refresh_local(file_200hr_url)
 st.write(f"Last refresh: {last_refresh_200hr}")
 
 # URLs to your Excel files
