@@ -79,7 +79,7 @@ if generate_button:
         st.dataframe(batch_booking_source_200hr)
 
         # Chart 
-        # st.subheader("Chart")
+        st.subheader("Chart")
 
         batch_start_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
         batch_end_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch end date'))
@@ -105,7 +105,7 @@ if generate_button:
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "valueFormatter": "{value:.2f}"  # Format langsung pada tooltip
+                "valueFormatter": "${value.toFixed(2)}"  # Format langsung pada tooltip
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable"]
@@ -121,7 +121,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": "${value:,.0f}"  # Format untuk y-axis
+                    "formatter": "${value.toLocaleString()}"  # Format untuk y-axis dengan pemisah ribuan
                 }
             },
             "series": [
@@ -137,7 +137,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@value:.2f}"  # Format angka dengan dua desimal
+                        "formatter": "${@[2].toLocaleString()}"  # Format angka dengan pemisah ribuan
                     }
                 },
                 {
@@ -153,7 +153,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@value:.2f}"  # Format angka dengan dua desimal
+                        "formatter": "${@[2].toLocaleString()}"  # Format angka dengan pemisah ribuan
                     }
                 }
             ]
