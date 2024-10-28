@@ -51,9 +51,9 @@ if generate_button:
         }).unstack(fill_value=0)
 
         batch_booking_source_200hr = batch_booking_source_200hr.sort_index(level='Batch start date', ascending=True)
-        batch_booking_source_200hr_corrected_sorted.index = batch_booking_source_200hr_corrected_sorted.index.set_levels(
-            [batch_booking_source_200hr_corrected_sorted.index.levels[0].strftime('%B %d, %Y'),
-             batch_booking_source_200hr_corrected_sorted.index.levels[1].strftime('%B %d, %Y')],
+        batch_booking_source_200hr.index = batch_booking_source_200hr.index.set_levels(
+            [batch_booking_source_200hr.index.levels[0].strftime('%B %d, %Y'),
+             batch_booking_source_200hr.index.levels[1].strftime('%B %d, %Y')],
             level=['Batch start date', 'Batch end date']
         )
         
