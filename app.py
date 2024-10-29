@@ -117,7 +117,7 @@ if generate_button:
             "xAxis": {
                 "type": "category",
                 "data": wrapped_labels,
-                "axisLabel": {"interval": 0, "rotate": 0, "fontSize": 9},
+                "axisLabel": {"interval": 0, "rotate": 0, "fontSize": 8},
             },
             "yAxis": {
                 "type": "value",
@@ -305,7 +305,7 @@ if generate_button:
             "xAxis": {
                 "type": "category",
                 "data": wrapped_labels,
-                "axisLabel": {"interval": 0, "rotate": 0, "fontSize": 9},
+                "axisLabel": {"interval": 0, "rotate": 0, "fontSize": 8},
             },
             "yAxis": {
                 "type": "value",
