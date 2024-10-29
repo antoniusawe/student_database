@@ -166,7 +166,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "{c}",
+                        "formatter": "(lambda x: str(round(x)))",
                         "fontSize": 8,
                         "color": "grey"
                     },
