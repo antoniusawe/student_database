@@ -170,7 +170,7 @@ if generate_button:
                         "fontSize": 8,
                         "color": "red"
                     },
-                    barWidth": "60%",
+                    "barWidth": "60%",
                     "stack": "gap",
                 },
             ],
