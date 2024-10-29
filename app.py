@@ -106,10 +106,19 @@ if generate_button:
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "formatter": "{b0}<br/>"
-                            "Total Paid: {c0:,}<br/>"
-                            "Total Payable: {c1:,}<br/>"
-                            "Gap: {c2:,}"
+                "formatter": """
+                    function(params) {
+                        const date = params[0].name;
+                        const totalPaid = params[0].value;
+                        const totalPayable = params[1].value;
+                        const gap = totalPayable - totalPaid;
+                        
+                        return `${date}<br />` +
+                               `Total Paid: $${totalPaid.toLocaleString()}<br />` +
+                               `Total Payable: $${totalPayable.toLocaleString()}<br />` +
+                               `Gap: $${gap.toLocaleString()}`;
+                    }
+                """
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable", "Gap"]
@@ -125,7 +134,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": "{value:,}"
+                    "formatter": "${value}"
                 }
             },
             "series": [
@@ -141,7 +150,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "{c:,}"
+                        "formatter": "${value}"
                     }
                 },
                 {
@@ -157,7 +166,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "{c:,}"
+                        "formatter": "${value}"
                     }
                 },
                 {
@@ -170,7 +179,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "{c:,}"
+                        "formatter": "${value}"
                     },
                     "tooltip": {"show": False}
                 }
