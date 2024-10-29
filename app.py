@@ -140,7 +140,7 @@ if generate_button:
                         "fontSize": 8,
                         "color": "blue"
                     },
-                    "areaStyle": {}  # Mengisi warna di bawah garis
+                    # "areaStyle": {}  # Mengisi warna di bawah garis
                 },
                 {
                     "name": "Total Payable (in USD or USD equiv)",
@@ -170,7 +170,6 @@ if generate_button:
                         "fontSize": 8,
                         "color": "red"
                     },
-                    "areaStyle": {}
                     "symbol": "none",
                     "lineStyle": {"width": 1, "type": "dotted"},
                 },
