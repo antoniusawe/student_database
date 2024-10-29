@@ -100,7 +100,7 @@ if generate_button:
         # ambil data Total paid and Total payable
         total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1).tolist()
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).tolist()
-        total_gap_all = batch_booking_source_sorted['Student still to pay'].sum(axis=1).tolist()
+        total_gap_all = [(payable - paid) for payable, paid in zip(total_payable_all, total_paid_all)]
         
         # Konversi labels X-axis
         wrapped_labels = [label.replace(" to ", "\nto\n").replace(" ", "\n", 1) for label in batch_dates]
