@@ -119,10 +119,9 @@ if generate_button:
                     "fontSize": 8,
                     "color": "#1f77b4"
                 },
-                "areaStyle": {  # Menambahkan area style
+                "areaStyle": {  # Menambahkan area style untuk area di antara garis
                     "opacity": 0.3,
-                    "color": "#b2b4a3",
-                    "origin": "start"  # Area dimulai dari garis bawah
+                    "color": "#b2b4a3"
                 }
             },
             {
@@ -149,9 +148,7 @@ if generate_button:
                 "label": {
                     "show": True,
                     "position": "middle",
-                    "formatter": function(params) {
-                        return gap[params.dataIndex].toFixed(0);  # Format gap tanpa desimal
-                    },
+                    "formatter": "{c:.0f}",  # Format gap tanpa desimal
                     "fontSize": 8,
                     "color": "red"
                 }
@@ -186,6 +183,7 @@ if generate_button:
             "series": series
         }
         
+        # Tampilkan chart
         st_echarts(options=options, height="400px")
 
         # ------------------------
