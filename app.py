@@ -79,115 +79,67 @@ if generate_button:
         st.dataframe(batch_booking_source_200hr)
 
         # Chart 
-        st.subheader("Chart")
+        # st.subheader("Chart")
 
+        # Extract 'Batch start date' and 'Batch end date' dan convert ke bentuk datetime
         batch_start_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch start date'))
         batch_end_dates = pd.to_datetime(batch_booking_source_200hr.index.get_level_values('Batch end date'))
-        
-        # Sort DataFrame berdasarkan periode batch
+
+        # sort the DataFrame berdasarkan periode batch
         batch_booking_source_sorted = batch_booking_source_200hr.copy()
         batch_booking_source_sorted = batch_booking_source_sorted.set_index([batch_start_dates, batch_end_dates])
         batch_booking_source_sorted = batch_booking_source_sorted.sort_index()
-        
-        # Convert datetime ke string format untuk visualisasi
+
+        # convert datetime ke string format untuk visualisasi
         batch_start_dates_sorted = batch_booking_source_sorted.index.get_level_values(0).strftime('%B %d, %Y')
         batch_end_dates_sorted = batch_booking_source_sorted.index.get_level_values(1).strftime('%B %d, %Y')
-        
-        # Combine "Batch start date" dan "Batch end date"
+
+        # combine "Batch start date" dan "Batch end date"
         batch_dates = [f"{start} to {end}" for start, end in zip(batch_start_dates_sorted, batch_end_dates_sorted)]
+
+        # ambil data Total paid and Total payable
+        total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1)
+        total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1)
+
+        # calculate the gap antara Total Payable dan Total Paid
+        gap = total_payable_all - total_paid_all
+
         
-        # Ambil data Total paid and Total payable
-        total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1).round(2).tolist()
-        total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).round(2).tolist()
-        gap_all = [round(payable - paid, 2) for payable, paid in zip(total_payable_all, total_paid_all)]
-        
-        # Menyusun data untuk ECharts
-        options = {
-            "tooltip": {
-                "trigger": "axis",
-                "axisPointer": {"type": "cross"},
-                "formatter": """
-                    function(params) {
-                        const date = params[0].name;
-                        const totalPaid = params[0].value;
-                        const totalPayable = params[1].value;
-                        const gap = totalPayable - totalPaid;
-                        
-                        return `${date}<br />` +
-                               `Total Paid: $${totalPaid.toLocaleString()}<br />` +
-                               `Total Payable: $${totalPayable.toLocaleString()}<br />` +
-                               `Gap: $${gap.toLocaleString()}`;
-                    }
-                """
-            },
-            "legend": {
-                "data": ["Total Paid", "Total Payable", "Gap"]
-            },
-            "xAxis": {
-                "type": "category",
-                "data": batch_dates,
-                "axisLabel": {
-                    "interval": 0,
-                    "rotate": 45,
-                }
-            },
-            "yAxis": {
-                "type": "value",
-                "axisLabel": {
-                    "formatter": "${value}"
-                }
-            },
-            "series": [
-                {
-                    "name": "Total Paid",
-                    "type": "line",
-                    "data": total_paid_all,
-                    "smooth": True,
-                    "symbol": "circle",
-                    "symbolSize": 8,
-                    "itemStyle": {"color": "blue"},
-                    "areaStyle": {"color": "rgba(0, 0, 255, 0.2)"},
-                    "label": {
-                        "show": True,
-                        "position": "top",
-                        "formatter": "${value}"
-                    }
-                },
-                {
-                    "name": "Total Payable",
-                    "type": "line",
-                    "data": total_payable_all,
-                    "smooth": True,
-                    "symbol": "circle",
-                    "symbolSize": 8,
-                    "itemStyle": {"color": "orange"},
-                    "lineStyle": {"type": "dashed"},
-                    "areaStyle": {"color": "rgba(255, 165, 0, 0.3)"},
-                    "label": {
-                        "show": True,
-                        "position": "top",
-                        "formatter": "${value}"
-                    }
-                },
-                {
-                    "name": "Gap",
-                    "type": "line",
-                    "data": gap_all,
-                    "smooth": True,
-                    "lineStyle": {"width": 0},
-                    "areaStyle": {"color": "rgba(128, 128, 128, 0.3)"},
-                    "label": {
-                        "show": True,
-                        "position": "top",
-                        "formatter": "${value}"
-                    },
-                    "tooltip": {"show": False}
-                }
-            ]
-        }
-        
-        # Tampilkan chart di Streamlit
-        st_echarts(options=options)
+        # Plot the lines
+        plt.figure(figsize=(10, 6))
+        plt.plot(batch_dates, total_paid_all, label="Total Paid (All Sources)", marker='o', color='blue')
+        plt.plot(batch_dates, total_payable_all, label="Total Payable (in USD or USD equiv)", marker='o', color='orange', linestyle='--')
+
+        # Add data labels for Total Paid
+        for i, txt in enumerate(total_paid_all):
+            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_paid_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='blue')
+
+        # Add data labels for Total Payable
+        for i, txt in enumerate(total_payable_all):
+            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_payable_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='orange')
+
+        # Fill the gap between the lines with a color
+        plt.fill_between(batch_dates, total_paid_all, total_payable_all, color='#b2b4a3', alpha=0.3)
+
+        # Add data labels for the gap (difference)
+        for i, g in enumerate(gap):
+            plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid_all[i] + total_payable_all[i]) / 2), 
+                         textcoords="offset points", xytext=(0,0), ha='center', color='red', fontsize=8)
+
+        # Labeling the chart
+        wrapped_labels = [label.replace(" to ", "\nto\n") for label in batch_dates]
+        wrapped_labels = [label.replace(" ", "\n", 1) for label in wrapped_labels]
+
+        plt.xlabel("Batch Date Range (Start to End)")
+        plt.ylabel("Amount")
+        plt.xticks(ticks=range(len(batch_dates)), labels=wrapped_labels, rotation=0, ha="center", fontsize=8.3)
+        plt.ylim(0, max(total_payable_all) * 1.1)  # Add some padding on top
+        plt.legend()
+
+        # Use tight layout
+        plt.tight_layout()
+        # Show the plot in Streamlit
+        st.pyplot(plt)
 
         # ------------------------
         # Checking unique values and counts in the column "What channel, with which student initiated enquiry?"
@@ -279,101 +231,65 @@ if generate_button:
         # Chart generation section
         # st.subheader("Chart")
 
+        # Extract 'Batch start date' and 'Batch end date' from the index and convert them to datetime
         batch_start_dates = pd.to_datetime(batch_booking_source_300hr.index.get_level_values('Batch start date'))
         batch_end_dates = pd.to_datetime(batch_booking_source_300hr.index.get_level_values('Batch end date'))
-        
-        # Sort DataFrame berdasarkan periode batch
+
+        # Sort the DataFrame by the converted datetime index values
         batch_booking_source_sorted = batch_booking_source_300hr.copy()
         batch_booking_source_sorted = batch_booking_source_sorted.set_index([batch_start_dates, batch_end_dates])
         batch_booking_source_sorted = batch_booking_source_sorted.sort_index()
-        
-        # Convert datetime ke string format untuk visualisasi
+
+        # Convert the sorted dates back to the desired string format for display purposes
         batch_start_dates_sorted = batch_booking_source_sorted.index.get_level_values(0).strftime('%B %d, %Y')
         batch_end_dates_sorted = batch_booking_source_sorted.index.get_level_values(1).strftime('%B %d, %Y')
-        
-        # Combine "Batch start date" dan "Batch end date"
+
+        # Combine start and end dates for x-axis labels
         batch_dates = [f"{start} to {end}" for start, end in zip(batch_start_dates_sorted, batch_end_dates_sorted)]
+
+        # Extract the data for Total paid and Total payable across all sources
+        total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1)
+        total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1)
+
+        # Calculate the gap between Total Payable and Total Paid
+        gap = total_payable_all - total_paid_all
+
+        # Plot the lines
+        plt.figure(figsize=(10, 6))
+        plt.plot(batch_dates, total_paid_all, label="Total Paid (All Sources)", marker='o', color='blue')
+        plt.plot(batch_dates, total_payable_all, label="Total Payable (in USD or USD equiv)", marker='o', color='orange', linestyle='--')
+
+        # Add data labels for Total Paid
+        for i, txt in enumerate(total_paid_all):
+            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_paid_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='blue')
+
+        # Add data labels for Total Payable
+        for i, txt in enumerate(total_payable_all):
+            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_payable_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='orange')
+
+        # Fill the gap between the lines with a color
+        plt.fill_between(batch_dates, total_paid_all, total_payable_all, color='grey', alpha=0.3)
+
+        # Add data labels for the gap (difference)
+        for i, g in enumerate(gap):
+            plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid_all[i] + total_payable_all[i]) / 2), 
+                         textcoords="offset points", xytext=(0,0), ha='center', color='red', fontsize=8)
+
+        wrapped_labels = [label.replace(" to ", "\nto\n") for label in batch_dates]
+        wrapped_labels = [label.replace(" ", "\n", 1) for label in wrapped_labels]
         
-        # Ambil data Total paid and Total payable
-        total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1).round(2).tolist()
-        total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).round(2).tolist()
-        gap_all = [round(payable - paid, 2) for payable, paid in zip(total_payable_all, total_paid_all)]
-        
-        # Menyusun data untuk ECharts
-        options = {
-            "tooltip": {
-                "trigger": "axis",
-                "axisPointer": {"type": "cross"},
-                "formatter": """{b0}<br />Total Paid: ${c0}<br />Total Payable: ${c1}<br />Gap: ${c2}"""  # Menampilkan tooltip dengan format sederhana
-            },
-            "legend": {
-                "data": ["Total Paid", "Total Payable", "Gap"]
-            },
-            "xAxis": {
-                "type": "category",
-                "data": batch_dates,
-                "axisLabel": {
-                    "interval": 0,
-                    "rotate": 45,
-                }
-            },
-            "yAxis": {
-                "type": "value",
-                "axisLabel": {
-                    "formatter": "${value}"  # Format untuk y-axis sebagai mata uang
-                }
-            },
-            "series": [
-                {
-                    "name": "Total Paid",
-                    "type": "line",
-                    "data": total_paid_all,
-                    "smooth": True,
-                    "symbol": "circle",
-                    "symbolSize": 8,
-                    "itemStyle": {"color": "blue"},
-                    "areaStyle": {"color": "rgba(0, 0, 255, 0.2)"},
-                    "label": {
-                        "show": True,
-                        "position": "top",
-                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
-                    }
-                },
-                {
-                    "name": "Total Payable",
-                    "type": "line",
-                    "data": total_payable_all,
-                    "smooth": True,
-                    "symbol": "circle",
-                    "symbolSize": 8,
-                    "itemStyle": {"color": "orange"},
-                    "lineStyle": {"type": "dashed"},
-                    "areaStyle": {"color": "rgba(255, 165, 0, 0.3)"},
-                    "label": {
-                        "show": True,
-                        "position": "top",
-                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
-                    }
-                },
-                {
-                    "name": "Gap",
-                    "type": "line",
-                    "data": gap_all,
-                    "smooth": True,
-                    "lineStyle": {"width": 0},  # Menghilangkan garis, hanya area
-                    "areaStyle": {"color": "rgba(128, 128, 128, 0.3)"},  # Area transparan untuk Gap
-                    "label": {
-                        "show": True,
-                        "position": "top",
-                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
-                    },
-                    "tooltip": {"show": False}  # Tidak perlu tooltip terpisah untuk Gap
-                }
-            ]
-        }
-        
-        # Tampilkan chart di Streamlit
-        st_echarts(options=options)
+        # Labeling the chart
+        plt.xlabel("Batch Date Range (Start to End)")
+        plt.ylabel("Amount")
+        plt.xticks(ticks=range(len(batch_dates)), labels=wrapped_labels, rotation=0, ha="center", fontsize=8)
+        plt.ylim(0, max(total_payable_all) * 1.1)  # Add some padding on top
+        plt.legend()
+
+        # Use tight layout
+        plt.tight_layout()
+
+        # Show the plot in Streamlit
+        st.pyplot(plt)
 
         # ------------------------
         # Checking unique values and counts in the column "What channel, with which student initiated enquiry?"
