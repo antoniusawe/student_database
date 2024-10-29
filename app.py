@@ -107,9 +107,9 @@ if generate_button:
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
                 "formatter": "{b0}<br/>"
-                            "Total Paid: ${c0:,.2f}<br/>"
-                            "Total Payable: ${c1:,.2f}<br/>"
-                            "Gap: ${c2:,.2f}"
+                            "Total Paid: {c0:,}<br/>"
+                            "Total Payable: {c1:,}<br/>"
+                            "Gap: {c2:,}"
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable", "Gap"]
@@ -125,7 +125,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": "${value:,.2f}"
+                    "formatter": "{value:,}"
                 }
             },
             "series": [
@@ -141,7 +141,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${c:,.2f}"
+                        "formatter": "{c:,}"
                     }
                 },
                 {
@@ -157,7 +157,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${c:,.2f}"
+                        "formatter": "{c:,}"
                     }
                 },
                 {
@@ -170,7 +170,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${c:,.2f}"
+                        "formatter": "{c:,}"
                     },
                     "tooltip": {"show": False}
                 }
