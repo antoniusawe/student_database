@@ -130,7 +130,7 @@ if generate_button:
                     "type": "line",
                     "data": total_paid_all,
                     "itemStyle": {"color": "blue"},
-                    "lineStyle": {"type": "dashed", "width": 2},
+                    "lineStyle": {"width": 2},
                     "symbol": "circle",
                     "symbolSize": 8,
                     "label": {
