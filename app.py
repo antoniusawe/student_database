@@ -122,7 +122,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "min": 0,
-                "max": max(total_payable_all) * 1.1,
+                "max": max(total_payable_all),
             },
             "series": [
                 {
