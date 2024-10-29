@@ -116,7 +116,7 @@ if generate_button:
                             'Total Payable: ' + totalPayable + '<br />' +
                             'Gap: ' + gap;
                     }
-                """  # Menggunakan function untuk format angka
+                """
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable", "Gap"]
@@ -132,7 +132,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": "{value}"  # Tetap gunakan angka tanpa simbol mata uang
+                    "formatter": function(value) { return value.toLocaleString(); }
                 }
             },
             "series": [
@@ -148,7 +148,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "{@[2], number}"  # Format angka dengan pemisah ribuan
+                        "formatter": function(params) { return params.data.toLocaleString(); }
                     }
                 },
                 {
@@ -164,7 +164,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "{@[2], number}"  # Format angka dengan pemisah ribuan
+                        "formatter": function(params) { return params.data.toLocaleString(); }
                     }
                 },
                 {
@@ -177,7 +177,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "{@[2], number}"  # Format angka dengan pemisah ribuan
+                        "formatter": function(params) { return params.data.toLocaleString(); }
                     },
                     "tooltip": {"show": False}  # Tidak perlu tooltip terpisah untuk Gap
                 }
