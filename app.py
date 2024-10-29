@@ -100,9 +100,7 @@ if generate_button:
         # ambil data Total paid and Total payable
         total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1).tolist()
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).tolist()
-        
-        # Hitung gap antara Total Payable dan Total Paid secara langsung
-        gap = [(payable - paid) for payable, paid in zip(total_payable_all, total_paid_all)]
+        total_gap_all = batch_booking_source_sorted['Student still to pay'].sum(axis=1).tolist()
         
         # Konversi labels X-axis
         wrapped_labels = [label.replace(" to ", "\nto\n").replace(" ", "\n", 1) for label in batch_dates]
@@ -111,10 +109,10 @@ if generate_button:
         options = {
             "tooltip": {
                 "trigger": "axis",
-                "formatter": "{b0}: {c0} (Total Paid)<br />{b1}: {c1} (Total Payable)"
+                "formatter": "{b0}: {c0} (Total Paid)<br />{b1}: {c1} (Total Payable)<br />{b2}: {c2} (Gap)"
             },
             "legend": {
-                "data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)"],
+                "data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)", "Student Still to Pay (Gap)"],
             },
             "xAxis": {
                 "type": "category",
@@ -161,9 +159,9 @@ if generate_button:
                     },
                 },
                 {
-                    "name": "Gap",
+                    "name": "Student Still to Pay (Gap)",
                     "type": "line",
-                    "data": [(p + t) / 2 for p, t in zip(total_paid_all, total_payable_all)],
+                    "data": total_gap_all,
                     "itemStyle": {"color": "red"},
                     "label": {
                         "show": True,
@@ -173,7 +171,7 @@ if generate_button:
                         "color": "red"
                     },
                     "symbol": "none",
-                    "lineStyle": {"width": 0},
+                    "lineStyle": {"width": 1, "type": "dotted"},
                 },
             ],
         }
