@@ -106,7 +106,7 @@ if generate_button:
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "formatter": """{b0}<br />Total Paid: {c0}<br />Total Payable: {c1}<br />Gap: {c2}"""  # Menampilkan tooltip tanpa simbol mata uang
+                "formatter": """{b0}<br />Total Paid: {c0, number}<br />Total Payable: {c1, number}<br />Gap: {c2, number}"""  # Menampilkan tooltip dengan format angka yang lebih mudah dibaca
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable", "Gap"]
@@ -122,7 +122,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    # "formatter": "${value}"  # Hapus formatter ini agar tidak ada simbol mata uang
+                    "formatter": "{value}"  # Format untuk y-axis sebagai angka tanpa simbol mata uang
                 }
             },
             "series": [
@@ -138,7 +138,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "{@[2]}"  # Hapus simbol mata uang
+                        "formatter": "{@[2], number}"  # Format angka dengan pemisah ribuan
                     }
                 },
                 {
@@ -154,7 +154,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "{@[2]}"  # Hapus simbol mata uang
+                        "formatter": "{@[2], number}"  # Format angka dengan pemisah ribuan
                     }
                 },
                 {
@@ -167,7 +167,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "{@[2]}"  # Hapus simbol mata uang
+                        "formatter": "{@[2], number}"  # Format angka dengan pemisah ribuan
                     },
                     "tooltip": {"show": False}  # Tidak perlu tooltip terpisah untuk Gap
                 }
