@@ -170,8 +170,15 @@ if generate_button:
                         "fontSize": 8,
                         "color": "grey"
                     },
-                    "symbol": "none",
-                    "lineStyle": {"width": 1, "type": "dotted"},
+                    "markLine": {
+                        "data": [
+                            {"yAxis": min(total_paid_all), "lineStyle": {"type": "dashed", "color": "blue"}},
+                            {"yAxis": max(total_paid_all), "lineStyle": {"type": "dashed", "color": "red"}}
+                        ],
+                        "label": {
+                            "show": True,
+                            "formatter": "{b}",
+                            "position": "end",
                 },
             ],
         }
