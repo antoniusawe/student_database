@@ -132,7 +132,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": function(value) { return value.toLocaleString(); }
+                    "formatter": "function(value) { return value.toLocaleString(); }"  # Ditulis sebagai string
                 }
             },
             "series": [
@@ -148,7 +148,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": function(params) { return params.data.toLocaleString(); }
+                        "formatter": "function(params) { return params.data.toLocaleString(); }"  # Ditulis sebagai string
                     }
                 },
                 {
@@ -164,7 +164,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": function(params) { return params.data.toLocaleString(); }
+                        "formatter": "function(params) { return params.data.toLocaleString(); }"  # Ditulis sebagai string
                     }
                 },
                 {
@@ -177,7 +177,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": function(params) { return params.data.toLocaleString(); }
+                        "formatter": "function(params) { return params.data.toLocaleString(); }"  # Ditulis sebagai string
                     },
                     "tooltip": {"show": False}  # Tidak perlu tooltip terpisah untuk Gap
                 }
