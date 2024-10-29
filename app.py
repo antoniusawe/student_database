@@ -174,7 +174,7 @@ if generate_button:
                     "markLine": {
                         "data": [
                             {"yAxis": min(total_paid_all), "lineStyle": {"type": "solid", "color": "grey"}},
-                            {"yAxis": max(total_paid_all), "lineStyle": {"type": "solid", "color": "grey"}}
+                            {"yAxis": max(total_payable_all), "lineStyle": {"type": "solid", "color": "grey"}}
                         ],
                         "label": {
                             "show": True,
