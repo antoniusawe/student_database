@@ -112,7 +112,7 @@ if generate_button:
                 "formatter": "{b0}: {c0} (Total Paid)<br />{b1}: {c1} (Total Payable)"
             },
             "legend": {
-                "data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)"],
+                "data": ["Total Paid (All Sources)", "Gap (Total Payable - Total Paid)", "Total Payable (in USD or USD equiv)"],
             },
             "xAxis": {
                 "type": "category",
@@ -140,8 +140,16 @@ if generate_button:
                         "fontSize": 8,
                         "color": "blue"
                     },
-                    # Menggunakan areaStyle dengan transparansi sangat rendah agar terlihat tanpa warna
-                    "areaStyle": {"color": "rgba(0, 0, 0, 0)"},
+                },
+                {
+                    "name": "Gap (Total Payable - Total Paid)",
+                    "type": "line",
+                    "data": total_payable_all,
+                    "areaStyle": {
+                        "color": "rgba(255, 165, 0, 0.2)"
+                    },
+                    "lineStyle": {"width": 0},
+                    "symbol": "none"
                 },
                 {
                     "name": "Total Payable (in USD or USD equiv)",
@@ -158,10 +166,7 @@ if generate_button:
                         "fontSize": 8,
                         "color": "orange"
                     },
-                    "areaStyle": {
-                        "color": "rgba(255, 165, 0, 0.2)"  # Warna untuk mengisi area antara garis total_payable_all dan total_paid_all
-                    },
-                }
+                },
             ],
         }
         
