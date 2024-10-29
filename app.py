@@ -106,7 +106,17 @@ if generate_button:
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "formatter": """{b0}<br />Total Paid: ${c0}<br />Total Payable: ${c1}<br />Gap: ${c2}"""  # Menampilkan tooltip dengan format sederhana
+                "formatter": function(params) {
+                    const date = params[0].name;
+                    const totalPaid = params[0].value;
+                    const totalPayable = params[1].value;
+                    const gap = totalPayable - totalPaid;
+                    
+                    return `${date}<br />` +
+                           `Total Paid: $${totalPaid.toLocaleString()}<br />` +
+                           `Total Payable: $${totalPayable.toLocaleString()}<br />` +
+                           `Gap: $${gap.toLocaleString()}`;
+                }
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable", "Gap"]
@@ -122,7 +132,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": "${value}"  # Format untuk y-axis sebagai mata uang
+                    "formatter": "${value}"
                 }
             },
             "series": [
@@ -138,7 +148,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
+                        "formatter": "${value}"
                     }
                 },
                 {
@@ -154,7 +164,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
+                        "formatter": "${value}"
                     }
                 },
                 {
@@ -162,14 +172,14 @@ if generate_button:
                     "type": "line",
                     "data": gap_all,
                     "smooth": True,
-                    "lineStyle": {"width": 0},  # Menghilangkan garis, hanya area
-                    "areaStyle": {"color": "rgba(128, 128, 128, 0.3)"},  # Area transparan untuk Gap
+                    "lineStyle": {"width": 0},
+                    "areaStyle": {"color": "rgba(128, 128, 128, 0.3)"},
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
+                        "formatter": "${value}"
                     },
-                    "tooltip": {"show": False}  # Tidak perlu tooltip terpisah untuk Gap
+                    "tooltip": {"show": False}
                 }
             ]
         }
