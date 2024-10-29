@@ -110,18 +110,14 @@ if generate_button:
                 "type": "line",
                 "symbol": "circle",
                 "symbolSize": 8,
-                "data": total_paid_all,
-                "itemStyle": {"color": "#1f77b4"},  # warna biru
+                "data": [float(x) for x in total_paid_all],  # Konversi ke float
+                "itemStyle": {"color": "#1f77b4"},
                 "label": {
                     "show": True,
                     "position": "top",
-                    "formatter": "{c:.0f}",  # Format angka tanpa desimal
+                    "formatter": "{c:.0f}",
                     "fontSize": 8,
                     "color": "#1f77b4"
-                },
-                "areaStyle": {  # Menambahkan area style untuk area di antara garis
-                    "opacity": 0.3,
-                    "color": "#b2b4a3"
                 }
             },
             {
@@ -129,59 +125,70 @@ if generate_button:
                 "type": "line",
                 "symbol": "circle",
                 "symbolSize": 8,
-                "data": total_payable_all,
-                "itemStyle": {"color": "#ff7f0e"},  # warna oranye
+                "data": [float(x) for x in total_payable_all],  # Konversi ke float
+                "itemStyle": {"color": "#ff7f0e"},
                 "lineStyle": {"type": "dashed"},
                 "label": {
                     "show": True,
                     "position": "top",
-                    "formatter": "{c:.0f}",  # Format angka tanpa desimal
+                    "formatter": "{c:.0f}",
                     "fontSize": 8,
                     "color": "#ff7f0e"
-                }
-            },
-            {
-                "name": "Gap",
-                "type": "line",
-                "data": [(paid + payable)/2 for paid, payable in zip(total_paid_all, total_payable_all)],
-                "lineStyle": {"opacity": 0},
-                "label": {
-                    "show": True,
-                    "position": "middle",
-                    "formatter": "{c:.0f}",  # Format gap tanpa desimal
-                    "fontSize": 8,
-                    "color": "red"
                 }
             }
         ]
         
-        # Format x-axis labels
-        x_labels = [label.replace(" to ", "\nto\n").replace(" ", "\n", 1) for label in batch_dates]
-        
-        # Options untuk echarts
+        # Tambahkan area fill antara dua garis
         options = {
             "tooltip": {"trigger": "axis"},
             "legend": {"data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)"]},
             "grid": {"bottom": "15%"},
             "xAxis": {
                 "type": "category",
-                "data": x_labels,
+                "data": [str(x) for x in batch_dates],  # Konversi ke string
                 "axisLabel": {
                     "interval": 0,
-                    "fontSize": 8.3
+                    "fontSize": 8.3,
+                    "formatter": function (value) {
+                        return value.split(' ').join('\n');
+                    }
                 }
             },
             "yAxis": {
                 "type": "value",
                 "name": "Amount",
                 "min": 0,
-                "max": max(total_payable_all) * 1.1,
+                "max": float(max(total_payable_all) * 1.1),  # Konversi ke float
                 "axisLabel": {
-                    "formatter": "{value:,.0f}"  # Format angka dengan pemisah ribuan
+                    "formatter": "{value:,.0f}"
                 }
             },
             "series": series
         }
+        
+        # Tampahkan gap values di tengah area
+        gap_series = {
+            "name": "Gap",
+            "type": "line",
+            "data": [float((paid + payable)/2) for paid, payable in zip(total_paid_all, total_payable_all)],
+            "lineStyle": {"opacity": 0},
+            "label": {
+                "show": True,
+                "position": "middle",
+                "formatter": "{c:.0f}",
+                "fontSize": 8,
+                "color": "red"
+            }
+        }
+        
+        # Tambahkan area style ke series pertama
+        options["series"][0]["areaStyle"] = {
+            "opacity": 0.3,
+            "color": "#b2b4a3"
+        }
+        
+        # Tambahkan gap series
+        options["series"].append(gap_series)
         
         # Tampilkan chart
         st_echarts(options=options, height="400px")
