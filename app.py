@@ -106,17 +106,7 @@ if generate_button:
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "formatter": """
-                    function (params) {
-                        var totalPaid = params[0].data.toLocaleString();
-                        var totalPayable = params[1].data.toLocaleString();
-                        var gap = (params[1].data - params[0].data).toLocaleString();
-                        return params[0].axisValueLabel + '<br />' +
-                            'Total Paid: ' + totalPaid + '<br />' +
-                            'Total Payable: ' + totalPayable + '<br />' +
-                            'Gap: ' + gap;
-                    }
-                """
+                "formatter": """{b0}<br />Total Paid: ${c0}<br />Total Payable: ${c1}<br />Gap: ${c2}"""  # Menampilkan tooltip dengan format sederhana
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable", "Gap"]
@@ -132,7 +122,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": "function(value) { return value.toLocaleString(); }"  # Ditulis sebagai string
+                    "formatter": "${value}"  # Format untuk y-axis sebagai mata uang
                 }
             },
             "series": [
@@ -148,7 +138,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "function(params) { return params.data.toLocaleString(); }"  # Ditulis sebagai string
+                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
                     }
                 },
                 {
@@ -164,7 +154,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "function(params) { return params.data.toLocaleString(); }"  # Ditulis sebagai string
+                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
                     }
                 },
                 {
@@ -177,7 +167,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "function(params) { return params.data.toLocaleString(); }"  # Ditulis sebagai string
+                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
                     },
                     "tooltip": {"show": False}  # Tidak perlu tooltip terpisah untuk Gap
                 }
