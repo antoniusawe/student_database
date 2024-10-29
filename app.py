@@ -168,7 +168,7 @@ if generate_button:
                         "position": "top",
                         "formatter": "{c}",
                         "fontSize": 8,
-                        "color": "red"
+                        "color": "grey"
                     },
                     "symbol": "none",
                     "lineStyle": {"width": 1, "type": "dotted"},
