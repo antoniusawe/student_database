@@ -103,7 +103,6 @@ if generate_button:
 
         # calculate the gap antara Total Payable dan Total Paid
         gap = total_payable_all - total_paid_all
-
         
         series = [
             {
@@ -111,13 +110,19 @@ if generate_button:
                 "type": "line",
                 "symbol": "circle",
                 "symbolSize": 8,
-                "data": [{"value": val, "label": {"show": True, "formatter": "{c:.0f}"}} for val in total_paid_all],
+                "data": total_paid_all,
                 "itemStyle": {"color": "#1f77b4"},  # warna biru
                 "label": {
                     "show": True,
                     "position": "top",
+                    "formatter": "{c:.0f}",  # Format angka tanpa desimal
                     "fontSize": 8,
                     "color": "#1f77b4"
+                },
+                "areaStyle": {  # Menambahkan area style
+                    "opacity": 0.3,
+                    "color": "#b2b4a3",
+                    "origin": "start"  # Area dimulai dari garis bawah
                 }
             },
             {
@@ -125,12 +130,13 @@ if generate_button:
                 "type": "line",
                 "symbol": "circle",
                 "symbolSize": 8,
-                "data": [{"value": val, "label": {"show": True, "formatter": "{c:.0f}"}} for val in total_payable_all],
+                "data": total_payable_all,
                 "itemStyle": {"color": "#ff7f0e"},  # warna oranye
                 "lineStyle": {"type": "dashed"},
                 "label": {
                     "show": True,
                     "position": "top",
+                    "formatter": "{c:.0f}",  # Format angka tanpa desimal
                     "fontSize": 8,
                     "color": "#ff7f0e"
                 }
@@ -138,12 +144,14 @@ if generate_button:
             {
                 "name": "Gap",
                 "type": "line",
-                "data": [{"value": (paid + payable)/2, "label": {"formatter": f"{g:.0f}"}} 
-                        for paid, payable, g in zip(total_paid_all, total_payable_all, gap)],
+                "data": [(paid + payable)/2 for paid, payable in zip(total_paid_all, total_payable_all)],
                 "lineStyle": {"opacity": 0},
                 "label": {
                     "show": True,
                     "position": "middle",
+                    "formatter": function(params) {
+                        return gap[params.dataIndex].toFixed(0);  # Format gap tanpa desimal
+                    },
                     "fontSize": 8,
                     "color": "red"
                 }
@@ -153,9 +161,8 @@ if generate_button:
         # Format x-axis labels
         x_labels = [label.replace(" to ", "\nto\n").replace(" ", "\n", 1) for label in batch_dates]
         
-        # Buat options untuk echarts
+        # Options untuk echarts
         options = {
-            "title": {},
             "tooltip": {"trigger": "axis"},
             "legend": {"data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)"]},
             "grid": {"bottom": "15%"},
@@ -171,17 +178,14 @@ if generate_button:
                 "type": "value",
                 "name": "Amount",
                 "min": 0,
-                "max": max(total_payable_all) * 1.1
+                "max": max(total_payable_all) * 1.1,
+                "axisLabel": {
+                    "formatter": "{value:,.0f}"  # Format angka dengan pemisah ribuan
+                }
             },
-            "series": series,
-            "areaStyle": {
-                "opacity": 0.3,
-                "color": "#b2b4a3"
-            }
+            "series": series
         }
         
-        # Tampilkan chart dengan streamlit-echarts
-        from streamlit_echarts import st_echarts
         st_echarts(options=options, height="400px")
 
         # ------------------------
