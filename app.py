@@ -170,7 +170,7 @@ if generate_button:
                         "fontSize": 8,
                         "color": "red"
                     },
-                    "symbol": "none",
+                    "symbol": "circle",
                     "lineStyle": {"width": 1, "type": "dotted"},
                 },
             ],
