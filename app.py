@@ -100,8 +100,8 @@ if generate_button:
         # ambil data Total paid and Total payable
         total_payable_all = batch_booking_source_sorted['Total Payable (in USD or USD equiv)'].sum(axis=1).tolist()
         total_paid_all = batch_booking_source_sorted['Total paid (as of today)'].sum(axis=1).tolist()
-        total_gap_all = [(payable - paid) for payable, paid in zip(total_payable_all, total_paid_all)]
-        
+        total_gap_all = batch_booking_source_sorted['Student still to pay'].sum(axis=1).tolist()
+
         # Konversi labels X-axis
         wrapped_labels = [label.replace(" to ", "\nto\n").replace(" ", "\n", 1) for label in batch_dates]
         
@@ -109,10 +109,10 @@ if generate_button:
         options = {
             "tooltip": {
                 "trigger": "axis",
-                "formatter": "{b0}: {c0} (Total Paid)<br />{b1}: {c1} (Total Payable)"
+                "formatter": "{b0}: {c0} (Total Paid)<br />{b1}: {c1} (Total Payable)<br />{b2}: {c2} (Gap)"
             },
             "legend": {
-                "data": ["Total Paid (All Sources)", "Gap (Total Payable - Total Paid)", "Total Payable (in USD or USD equiv)"],
+                "data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)", "Student Still to Pay (Gap)"],
             },
             "xAxis": {
                 "type": "category",
@@ -140,16 +140,7 @@ if generate_button:
                         "fontSize": 8,
                         "color": "blue"
                     },
-                },
-                {
-                    "name": "Gap (Total Payable - Total Paid)",
-                    "type": "line",
-                    "data": total_payable_all,
-                    "areaStyle": {
-                        "color": "rgba(255, 165, 0, 0.2)"
-                    },
-                    "lineStyle": {"width": 0},
-                    "symbol": "none"
+                    "areaStyle": {}  # Mengisi warna di bawah garis
                 },
                 {
                     "name": "Total Payable (in USD or USD equiv)",
@@ -166,6 +157,21 @@ if generate_button:
                         "fontSize": 8,
                         "color": "orange"
                     },
+                },
+                {
+                    "name": "Student Still to Pay (Gap)",
+                    "type": "line",
+                    "data": total_gap_all,
+                    "itemStyle": {"color": "red"},
+                    "label": {
+                        "show": True,
+                        "position": "top",
+                        "formatter": "{c}",
+                        "fontSize": 8,
+                        "color": "red"
+                    },
+                    "symbol": "none",
+                    "lineStyle": {"width": 1, "type": "dotted"},
                 },
             ],
         }
