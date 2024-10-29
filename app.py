@@ -122,7 +122,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "min": 0,
-                "max": max(total_payable_all) * 1.1,
+                "max": max(total_payable_all),
             },
             "series": [
                 {
@@ -140,6 +140,7 @@ if generate_button:
                         "fontSize": 8,
                         "color": "blue"
                     },
+                    # "areaStyle": {}  # Mengisi warna di bawah garis
                 },
                 {
                     "name": "Total Payable (in USD or USD equiv)",
@@ -171,18 +172,6 @@ if generate_button:
                     },
                     "symbol": "none",
                     "lineStyle": {"width": 1, "type": "dotted"},
-                    "markLine": {
-                        "data": [
-                            {"yAxis": min(total_paid_all), "lineStyle": {"type": "solid", "color": "grey"}},
-                            {"yAxis": max(total_payable_all), "lineStyle": {"type": "solid", "color": "grey"}}
-                        ],
-                        "label": {
-                            "show": True,
-                            "formatter": "{b}",
-                            "position": "end",
-                            "color": "grey"
-                        }
-                    }
                 },
             ],
         }
@@ -321,7 +310,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "min": 0,
-                "max": max(total_payable_all) * 1.1,
+                "max": max(total_payable_all),
             },
             "series": [
                 {
