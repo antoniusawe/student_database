@@ -117,12 +117,12 @@ if generate_button:
             "xAxis": {
                 "type": "category",
                 "data": wrapped_labels,
-                "axisLabel": {"interval": 0, "rotate": 0, "fontSize": 8},
+                "axisLabel": {"interval": 0, "rotate": 0, "fontSize": 10},
             },
             "yAxis": {
                 "type": "value",
                 "min": 0,
-                "max": max(total_payable_all),
+                "max": max(total_payable_all) * 1.1,
             },
             "series": [
                 {
@@ -170,15 +170,8 @@ if generate_button:
                         "fontSize": 8,
                         "color": "grey"
                     },
-                    "markLine": {
-                        "data": [
-                            {"yAxis": min(total_paid_all), "lineStyle": {"type": "dashed", "color": "blue"}},
-                            {"yAxis": max(total_paid_all), "lineStyle": {"type": "dashed", "color": "red"}}
-                        ],
-                        "label": {
-                            "show": True,
-                            "formatter": "{b}",
-                            "position": "end",
+                    "symbol": "none",
+                    "lineStyle": {"width": 1, "type": "dotted"},
                 },
             ],
         }
@@ -312,7 +305,7 @@ if generate_button:
             "xAxis": {
                 "type": "category",
                 "data": wrapped_labels,
-                "axisLabel": {"interval": 0, "rotate": 0, "fontSize": 8},
+                "axisLabel": {"interval": 0, "rotate": 0, "fontSize": 10},
             },
             "yAxis": {
                 "type": "value",
