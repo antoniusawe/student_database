@@ -106,17 +106,10 @@ if generate_button:
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "formatter": function(params) {
-                    const date = params[0].name;
-                    const totalPaid = params[0].value;
-                    const totalPayable = params[1].value;
-                    const gap = totalPayable - totalPaid;
-                    
-                    return `${date}<br />` +
-                           `Total Paid: $${totalPaid.toLocaleString()}<br />` +
-                           `Total Payable: $${totalPayable.toLocaleString()}<br />` +
-                           `Gap: $${gap.toLocaleString()}`;
-                }
+                "formatter": "{b0}<br/>"
+                            "Total Paid: ${c0}<br/>"
+                            "Total Payable: ${c1}<br/>"
+                            "Gap: ${c2}"
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable", "Gap"]
