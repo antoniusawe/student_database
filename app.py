@@ -140,6 +140,8 @@ if generate_button:
                         "fontSize": 8,
                         "color": "blue"
                     },
+                    # Menggunakan areaStyle dengan transparansi sangat rendah agar terlihat tanpa warna
+                    "areaStyle": {"color": "rgba(0, 0, 0, 0)"},
                 },
                 {
                     "name": "Total Payable (in USD or USD equiv)",
