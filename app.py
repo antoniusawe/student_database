@@ -130,7 +130,7 @@ if generate_button:
                     "type": "line",
                     "data": total_paid_all,
                     "itemStyle": {"color": "blue"},
-                    "lineStyle": {"width": 2},
+                    "lineStyle": {"type": "dashed", "width": 2},
                     "symbol": "circle",
                     "symbolSize": 8,
                     "label": {
@@ -140,7 +140,7 @@ if generate_button:
                         "fontSize": 8,
                         "color": "blue"
                     },
-                    "areaStyle": {}  # Mengisi warna di bawah garis
+                    # "areaStyle": {}  # Mengisi warna di bawah garis
                 },
                 {
                     "name": "Total Payable (in USD or USD equiv)",
