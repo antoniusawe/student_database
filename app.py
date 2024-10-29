@@ -109,10 +109,10 @@ if generate_button:
         options = {
             "tooltip": {
                 "trigger": "axis",
-                "formatter": "{b0}: {c0} (Total Paid)<br />{b1}: {c1} (Total Payable)<br />{b2}: {c2} (Gap)"
+                "formatter": "{b0}: {c0} (Total Paid)<br />{b1}: {c1} (Total Payable)"
             },
             "legend": {
-                "data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)", "Student Still to Pay (Gap)"],
+                "data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)"],
             },
             "xAxis": {
                 "type": "category",
@@ -140,7 +140,6 @@ if generate_button:
                         "fontSize": 8,
                         "color": "blue"
                     },
-                    # "areaStyle": {}  # Mengisi warna di bawah garis
                 },
                 {
                     "name": "Total Payable (in USD or USD equiv)",
@@ -157,23 +156,10 @@ if generate_button:
                         "fontSize": 8,
                         "color": "orange"
                     },
-                },
-                {
-                    "name": "Student Still to Pay (Gap)",
-                    "type": "line",
-                    "data": total_gap_all,
-                    "itemStyle": {"color": "red"},
-                    "label": {
-                        "show": True,
-                        "position": "top",
-                        "formatter": "{c}",
-                        "fontSize": 8,
-                        "color": "red"
+                    "areaStyle": {
+                        "color": "rgba(255, 165, 0, 0.2)"  # Warna untuk mengisi area antara garis total_payable_all dan total_paid_all
                     },
-                    "areaStyle": {},
-                    "symbol": "none",
-                    "lineStyle": {"width": 1, "type": "dotted"},
-                },
+                }
             ],
         }
         
