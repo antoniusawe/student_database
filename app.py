@@ -106,7 +106,7 @@ if generate_button:
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "formatter": """{b0}<br />Total Paid: ${c0}<br />Total Payable: ${c1}<br />Gap: ${c2}"""  # Menampilkan tooltip dengan format sederhana
+                "formatter": """{b0}<br />Total Paid: {c0}<br />Total Payable: {c1}<br />Gap: {c2}"""  # Menampilkan tooltip tanpa simbol mata uang
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable", "Gap"]
@@ -122,7 +122,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": "${value}"  # Format untuk y-axis sebagai mata uang
+                    # "formatter": "${value}"  # Hapus formatter ini agar tidak ada simbol mata uang
                 }
             },
             "series": [
@@ -138,7 +138,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
+                        "formatter": "{@[2]}"  # Hapus simbol mata uang
                     }
                 },
                 {
@@ -154,7 +154,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
+                        "formatter": "{@[2]}"  # Hapus simbol mata uang
                     }
                 },
                 {
@@ -167,7 +167,7 @@ if generate_button:
                     "label": {
                         "show": True,
                         "position": "top",
-                        "formatter": "${@[2]}"  # Format angka pada label sebagai mata uang
+                        "formatter": "{@[2]}"  # Hapus simbol mata uang
                     },
                     "tooltip": {"show": False}  # Tidak perlu tooltip terpisah untuk Gap
                 }
