@@ -160,7 +160,7 @@ if generate_button:
                 },
                 {
                     "name": "Student Still to Pay (Gap)",
-                    "type": "line",
+                    "type": "bar",
                     "data": total_gap_all,
                     "itemStyle": {"color": "red"},
                     "label": {
@@ -170,8 +170,8 @@ if generate_button:
                         "fontSize": 8,
                         "color": "red"
                     },
-                    "symbol": "none",
-                    "lineStyle": {"width": 1, "type": "dotted"},
+                    barWidth": "60%",
+                    "stack": "gap",
                 },
             ],
         }
