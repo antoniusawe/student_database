@@ -103,95 +103,43 @@ if generate_button:
 
         # calculate the gap antara Total Payable dan Total Paid
         gap = total_payable_all - total_paid_all
+
         
-        series = [
-            {
-                "name": "Total Paid (All Sources)",
-                "type": "line",
-                "symbol": "circle",
-                "symbolSize": 8,
-                "data": [float(x) for x in total_paid_all],  # Konversi ke float
-                "itemStyle": {"color": "#1f77b4"},
-                "label": {
-                    "show": True,
-                    "position": "top",
-                    "formatter": "{c:.0f}",
-                    "fontSize": 8,
-                    "color": "#1f77b4"
-                }
-            },
-            {
-                "name": "Total Payable (in USD or USD equiv)",
-                "type": "line",
-                "symbol": "circle",
-                "symbolSize": 8,
-                "data": [float(x) for x in total_payable_all],  # Konversi ke float
-                "itemStyle": {"color": "#ff7f0e"},
-                "lineStyle": {"type": "dashed"},
-                "label": {
-                    "show": True,
-                    "position": "top",
-                    "formatter": "{c:.0f}",
-                    "fontSize": 8,
-                    "color": "#ff7f0e"
-                }
-            }
-        ]
-        
-        # Tambahkan area fill antara dua garis
-        options = {
-            "tooltip": {"trigger": "axis"},
-            "legend": {"data": ["Total Paid (All Sources)", "Total Payable (in USD or USD equiv)"]},
-            "grid": {"bottom": "15%"},
-            "xAxis": {
-                "type": "category",
-                "data": [str(x) for x in batch_dates],  # Konversi ke string
-                "axisLabel": {
-                    "interval": 0,
-                    "fontSize": 8.3,
-                    "formatter": function (value) {
-                        return value.split(' ').join('\n');
-                    }
-                }
-            },
-            "yAxis": {
-                "type": "value",
-                "name": "Amount",
-                "min": 0,
-                "max": float(max(total_payable_all) * 1.1),  # Konversi ke float
-                "axisLabel": {
-                    "formatter": "{value:,.0f}"
-                }
-            },
-            "series": series
-        }
-        
-        # Tampahkan gap values di tengah area
-        gap_series = {
-            "name": "Gap",
-            "type": "line",
-            "data": [float((paid + payable)/2) for paid, payable in zip(total_paid_all, total_payable_all)],
-            "lineStyle": {"opacity": 0},
-            "label": {
-                "show": True,
-                "position": "middle",
-                "formatter": "{c:.0f}",
-                "fontSize": 8,
-                "color": "red"
-            }
-        }
-        
-        # Tambahkan area style ke series pertama
-        options["series"][0]["areaStyle"] = {
-            "opacity": 0.3,
-            "color": "#b2b4a3"
-        }
-        
-        # Tambahkan gap series
-        options["series"].append(gap_series)
-        
-        # Tampilkan chart
-        st_echarts(options=options, height="400px")
+        # Plot the lines
+        plt.figure(figsize=(10, 6))
+        plt.plot(batch_dates, total_paid_all, label="Total Paid (All Sources)", marker='o', color='blue')
+        plt.plot(batch_dates, total_payable_all, label="Total Payable (in USD or USD equiv)", marker='o', color='orange', linestyle='--')
+
+        # Add data labels for Total Paid
+        for i, txt in enumerate(total_paid_all):
+            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_paid_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='blue')
+
+        # Add data labels for Total Payable
+        for i, txt in enumerate(total_payable_all):
+            plt.annotate(f'{txt:.0f}', (batch_dates[i], total_payable_all[i]), textcoords="offset points", xytext=(0,5), ha='center', fontsize=8, color='orange')
+
+        # Fill the gap between the lines with a color
+        plt.fill_between(batch_dates, total_paid_all, total_payable_all, color='#b2b4a3', alpha=0.3)
+
+        # Add data labels for the gap (difference)
+        for i, g in enumerate(gap):
+            plt.annotate(f'{g:.0f}', (batch_dates[i], (total_paid_all[i] + total_payable_all[i]) / 2), 
+                         textcoords="offset points", xytext=(0,0), ha='center', color='red', fontsize=8)
+
+        # Labeling the chart
+        wrapped_labels = [label.replace(" to ", "\nto\n") for label in batch_dates]
+        wrapped_labels = [label.replace(" ", "\n", 1) for label in wrapped_labels]
+
+        plt.xlabel("Batch Date Range (Start to End)")
+        plt.ylabel("Amount")
+        plt.xticks(ticks=range(len(batch_dates)), labels=wrapped_labels, rotation=0, ha="center", fontsize=8.3)
+        plt.ylim(0, max(total_payable_all) * 1.1)  # Add some padding on top
+        plt.legend()
+
+        # Use tight layout
+        plt.tight_layout()
+        # Show the plot in Streamlit
+        st.pyplot(plt)
 
         # ------------------------
         # Checking unique values and counts in the column "What channel, with which student initiated enquiry?"
