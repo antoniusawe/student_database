@@ -106,7 +106,17 @@ if generate_button:
             "tooltip": {
                 "trigger": "axis",
                 "axisPointer": {"type": "cross"},
-                "formatter": """{b0}<br />Total Paid: {c0, number}<br />Total Payable: {c1, number}<br />Gap: {c2, number}"""  # Menampilkan tooltip dengan format angka yang lebih mudah dibaca
+                "formatter": """
+                    function (params) {
+                        var totalPaid = params[0].data.toLocaleString();
+                        var totalPayable = params[1].data.toLocaleString();
+                        var gap = (params[1].data - params[0].data).toLocaleString();
+                        return params[0].axisValueLabel + '<br />' +
+                            'Total Paid: ' + totalPaid + '<br />' +
+                            'Total Payable: ' + totalPayable + '<br />' +
+                            'Gap: ' + gap;
+                    }
+                """  # Menggunakan function untuk format angka
             },
             "legend": {
                 "data": ["Total Paid", "Total Payable", "Gap"]
@@ -122,7 +132,7 @@ if generate_button:
             "yAxis": {
                 "type": "value",
                 "axisLabel": {
-                    "formatter": "{value}"  # Format untuk y-axis sebagai angka tanpa simbol mata uang
+                    "formatter": "{value}"  # Tetap gunakan angka tanpa simbol mata uang
                 }
             },
             "series": [
